@@ -1,0 +1,54 @@
+.content_right .text_header{
+	width: 980px;
+	height: 67px;
+	
+	border-bottom: 1px solid #e8e8e8;
+	font-size: 16px;
+	padding-left: 20px;
+    padding-top: 20px;
+}
+
+.text_type{
+	display: inline-block;
+	padding: 10px 20px;
+	border-bottom: 2px solid transparent;
+}
+
+.text_type_active{
+	color: #f85959;
+}
+
+.text_input{
+	width: 980px;
+	padding: 20px 40px 20px 40px;
+}
+
+.text_input .text_title{
+	width: 900px;
+	height: 58px;
+	padding-top: 8px;
+	color: red;
+}
+.tui2-input{
+    width: 900px;
+	height: 50px;
+	padding-left: 10px;
+	font-size: 20px;
+	border-bottom: 1px solid #e8e8e8;
+	outline: none;
+}
+.text_content{
+	width: 900px;
+	/* height: 800px; */
+	margin-top: 10px;
+	padding: 15px 20px 15px 20px;
+}
+.text_button{
+	width: 980px;
+	height: 81px;
+	padding: 20px 40px;
+	border-top: 1px solid rgb(232, 232, 232);
+	background-color: white;
+	text-align: right;
+}
+

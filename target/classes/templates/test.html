@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/vue.js"></script>
+
+</head>
+<body>
+    <table border="1" id="testVue">
+        <tr>
+            <th>用户id</th>
+            <th>姓名</th>
+            <th>手机号码</th>
+            <th>操作</th>
+        </tr>
+        <tr  v-for="dtt in testList">
+            <td>{{dtt.id}}</td>
+            <td>{{dtt.tname}}</td>
+            <td>{{dtt.phone}}</td>
+            <td>
+                <button onclick="del(this.value)" :value="dtt.id"> 删除</button>
+                <button @click="dell()"> 修改</button>
+            </td>
+        </tr>
+    </table>
+
+    <div style="width: 200px;height: 150px;margin-left: 450px;background: pink;position: absolute;top:15px;">
+        <form  method="post" action="/add">
+            姓名：<input name="tname" type="text"/><br/>
+            手机：<input name="phone" type="text"/><br/><hr/>
+            <button type="submit">添加</button>
+        </form>
+    </div>
+
+    <script>
+        /* 显示 */
+        var testlist = new Vue({
+            el:'#testVue',
+            data:{
+                testList:''
+            },
+            created:function () {
+                $.ajax({
+                    type:'get',
+                    url:'/list',
+                    success:function (result) {
+                        console.log(result);
+                        testlist.testList = result;
+                    }
+                })
+            },
+            methods:{
+                dell:function() {
+                    alert("hello");
+     /*               $.ajax({
+                        type:'POST',
+                        url:'/delete/'+id,
+                        success:function (result) {
+                            if(result){
+                                window.location.href="/test";
+                            }else{
+
+                            }
+                        }
+                    })*/
+                }
+            }
+        });
+
+        /*  删除 */
+        function del(id) {
+           $.ajax({
+               type:'POST',
+               url:'/delete/'+id,
+               success:function (result) {
+                   if(result){
+                       window.location.href="/test";
+                   }else{
+
+                   }
+               }
+           })
+        }
+
+    </script>
+</body>
+</html>

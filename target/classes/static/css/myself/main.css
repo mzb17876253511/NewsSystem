@@ -1,0 +1,17 @@
+*{margin:0;padding:0}
+html, body {font-family: "Microsoft Yahei", Verdana, sans-serif;}
+ul, li{list-style: none;}
+address, cite, dfn, em, var {font-style: normal;}
+
+.banner{position: relative;overflow: auto;text-align: center;width:660px;margin:0 auto;height: 300px;border-radius:4px;}
+
+.banner .dots{position:relative;left:0;right:0;bottom:105px;z-index:3;}
+.banner .dots li{display:inline-block;width:13px;height:13px;margin:0 4px;text-indent:-999em;border:2px solid #fff;border-radius:6px;cursor:pointer;opacity:.4;-webkit-transition:background .5s,opacity .5s;-moz-transition:background .5s,opacity .5s;transition:background .5s,opacity .5s}
+.banner .dots li.active{background:#fff;opacity:1}
+
+
+
+.banner ul{z-index: 1;width: 600%;overflow: hidden;}
+.banner ul .slider-item {width:660px; float: left;height:300px; position: relative; overflow: hidden;}
+.banner ul .slider-item .slider-title {float:left;position: relative;left: 0px;bottom: 51px;width: 660px;max-height: 56px;padding: 10px;text-align:left;line-height: 28px;color: #fff;font-size: 18px;font-weight: bold;background: -webkit-linear-gradient(top, transparent, rgba(0,0,0,0.9));}
+.banner .progress{position:relative;left:0;bottom:13px;width:100%;heioverflow:hidden;z-index:2;background:#ed4040;height: 3px;}

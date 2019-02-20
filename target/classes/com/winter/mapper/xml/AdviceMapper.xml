@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winter.mapper.AdviceMapper" >
+  <resultMap id="BaseResultMap" type="com.winter.model.Advice" >
+    <id column="a_id" property="aId" jdbcType="VARCHAR" />
+    <result column="a_userid" property="aUserid" jdbcType="VARCHAR" />
+    <result column="a_message" property="aMessage" jdbcType="VARCHAR" />
+    <result column="a_isRead" property="aIsread" jdbcType="INTEGER" />
+    <result column="a_creattime" property="aCreattime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a_id, a_userid, a_message, a_isRead, a_creattime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from advice
+    where a_id = #{aId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from advice
+    where a_id = #{aId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.winter.model.Advice" >
+    insert into advice (a_id, a_userid, a_message, 
+      a_isRead, a_creattime)
+    values (#{aId,jdbcType=VARCHAR}, #{aUserid,jdbcType=VARCHAR}, #{aMessage,jdbcType=VARCHAR}, 
+      #{aIsread,jdbcType=INTEGER}, #{aCreattime,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.winter.model.Advice" >
+    insert into advice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aId != null" >
+        a_id,
+      </if>
+      <if test="aUserid != null" >
+        a_userid,
+      </if>
+      <if test="aMessage != null" >
+        a_message,
+      </if>
+      <if test="aIsread != null" >
+        a_isRead,
+      </if>
+      <if test="aCreattime != null" >
+        a_creattime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aId != null" >
+        #{aId,jdbcType=VARCHAR},
+      </if>
+      <if test="aUserid != null" >
+        #{aUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="aMessage != null" >
+        #{aMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="aIsread != null" >
+        #{aIsread,jdbcType=INTEGER},
+      </if>
+      <if test="aCreattime != null" >
+        #{aCreattime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.winter.model.Advice" >
+    update advice
+    <set >
+      <if test="aUserid != null" >
+        a_userid = #{aUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="aMessage != null" >
+        a_message = #{aMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="aIsread != null" >
+        a_isRead = #{aIsread,jdbcType=INTEGER},
+      </if>
+      <if test="aCreattime != null" >
+        a_creattime = #{aCreattime,jdbcType=DATE},
+      </if>
+    </set>
+    where a_id = #{aId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.winter.model.Advice" >
+    update advice
+    set a_userid = #{aUserid,jdbcType=VARCHAR},
+      a_message = #{aMessage,jdbcType=VARCHAR},
+      a_isRead = #{aIsread,jdbcType=INTEGER},
+      a_creattime = #{aCreattime,jdbcType=DATE}
+    where a_id = #{aId,jdbcType=VARCHAR}
+  </update>
+</mapper>
