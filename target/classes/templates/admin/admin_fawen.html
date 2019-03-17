@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>发文用户申请</title>
+		<!-- css -->
+		<link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+		<link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+		<link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+		<link href="/static/css/animate.css" rel="stylesheet">
+		<link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
+			
+		<!-- js -->
+		<script src="/static/js/jquery.min.js?v=2.1.4"></script>
+		<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="/static/js/vue.js"></script>
+	</head>
+	
+	<body class="gray-bg">
+		<div class="col-sm-12" style="margin-top: 10px;" id="applyVue">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>用户申请成为新闻自媒体</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+							<i class="fa fa-chevron-up"></i>
+						</a>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class="fa fa-wrench"></i>
+						</a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="#">选项1</a>
+							</li>
+							<li><a href="#">选项2</a>
+							</li>
+						</ul>
+						<a class="close-link">
+							<i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>帐号头像</th>
+								<th>帐号名称</th>
+								<th>帐号简介</th>								
+								<th>申请人</th>
+								
+								<th>手机号码</th>
+								<th>身份证号码</th>
+								<th>申请时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="dt in nolist">
+								<td>
+									<img :src="dt.imgPath" style="width: 50px;height: 50px;border-radius: 50%;"/>
+								</td>								
+								<td>
+									{{dt.newsuser.newsuserName}}
+								</td>
+								<td>
+									{{dt.newsuser.newsuserIntro}}
+								</td>
+								<td>{{dt.newsuser.newsuserUname}}</td>
+								<td>{{dt.newsuser.newsuserPhone}}</td>
+								<td>
+									{{dt.newsuser.newsuserIdcard}}
+								</td>
+								<td>
+									<span class="line text-navy">{{dt.applytime}}</span>
+								</td>
+								<td>
+									<button type="button" class="btn btn-success btn-sm" @click="applyOk(dt.newsuser.newsuserId)">通过</button>
+									<button type="button" class="btn btn-default btn-sm" @click="applyNo(dt.newsuser.newsuserId)">取消</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>		
+	    <script>
+			var vm = new Vue({
+				el:'#applyVue',
+				data:{
+				    nolist:'',
+					count:''
+				},
+				created:function () {
+					$.ajax({
+						type:'get',
+						url:'/admin/getApply',
+						success:function (result) {
+							vm.nolist = result.nolist;
+							vm.count = result.nolist.length;
+                        }
+					})
+                },
+				methods:{
+				    applyOk:function (id) {
+                        $.ajax({
+                            type:'post',
+                            url:'/admin/applyOk/'+id,
+                            success:function (result) {
+                                if(result.code == 0){
+                                    alert("用户已通过申请");
+                                    window.location.href="/admin/fawen";
+								}
+								else if(result.code == 1){
+								    alert("用户通过异常");
+                                    window.location.href="/admin/fawen";
+								}
+                            }
+                        })
+                    },
+                    applyNo:function (id) {
+                        $.ajax({
+                            type:'post',
+                            url:'/admin/applyNo/'+id,
+                            success:function (result) {
+                                if(result.code == 0){
+                                    alert("用户已取消通过");
+                                    window.location.href="/admin/fawen";
+                                }
+                                else if(result.code == 1){
+                                    alert("用户取消异常");
+                                    window.location.href="/admin/fawen";
+                                }
+                            }
+                        })
+                    }
+				}
+			});
+		</script>
+	</body>
+</html>

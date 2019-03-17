@@ -1,11 +1,8 @@
 package com.winter.model;
 
-
-
 import java.util.Date;
 
 public class Menu {
-
     private String mId;
 
     private String mUserid;

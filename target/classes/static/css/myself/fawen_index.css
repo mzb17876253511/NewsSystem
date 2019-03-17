@@ -1,3 +1,7 @@
+[v-cloak] {
+    display: none;
+}
+
 .content_right .index_header{
 	width: 980px;
 	height: 150px;

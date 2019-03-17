@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winter.mapper.FansMapper" >
+  <resultMap id="BaseResultMap" type="com.winter.model.Fans" >
+    <id column="f_id" property="fId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="fans_id" property="fansId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    f_id, user_id, fans_id
+  </sql>
+  <select id="getUserCount" resultType="INTEGER">
+     select count(*)
+     from fans
+     where fans_id = #{userId}
+  </select>
+  <select id="getFansCount" resultType="INTEGER">
+     select count(*)
+     from fans
+     where user_id = #{userId}
+  </select>
+
+</mapper>

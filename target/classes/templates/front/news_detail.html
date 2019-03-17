@@ -12,34 +12,84 @@
 		
 		<!-- 新闻详情CSS -->
 		<link href="/static/css/myself/news_detail.css" rel="stylesheet" />
+		<style>
+			.cl_text_content img{
+				width: 660px;
+				height: 388px;
+			}
+		</style>
+
+		<!-- js文件 -->
+
+		<script src="/static/js/jquery.min.js?v=2.1.4"></script>
+		<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="/static/js/vue.js"></script>
+
+
 	</head>
 	<body>
 		<div class="headerTop">
 			<div class="ht_left"></div>
-			<div class="ht_right">
+			<div class="ht_right" id="fawenVue">
 				<ul class="ul-nav-list"> 
-					<li style="float:left;" class="nav-login">
-						 <a href="#" class="tb-link">登录</a>
+					<li style="float:left;" class="nav-login" v-if="!isLogin">
+						 <a href="/login/index" class="tb-link">登录</a>
+					</li>
+					<li style="float:left;border-right: dimgray 1px solid;padding: 0px 10px;" v-else-if="isLogin">
+						<img :src="'/file/showImg/'+user.uImage" style="width: 24px;height: 24px;border-radius: 50%;">
+						<a  style="color:white;" class="tb-link1">{{user.uName}}</a>
 					</li>
 					<li style="float:left;padding: 0px 10px;border-right: dimgray 1px solid;" class="tb-link1">
 						侵权投诉
 					</li>
 					<li style="float:left;padding: 0px 10px;" class="tb-link1">
-						头条产品
+						先锋产品
 					</li>
 				</ul>
 			</div>
+			<script>
+                var fw = new Vue({
+                    el:'#fawenVue',
+                    data:{
+                        isLogin:false,
+                        user:''
+                    },
+                    created:function () {
+                        this.getUser();
+                    },
+                    methods:{
+                        getUser:function () {
+                            $.ajax({
+                                type:'post',
+                                url:'/login/getUsers',
+                                data:'json',
+                                success:function (result) {
+                                    if(result.code == 1){
+                                        fw.isLogin = false;
+
+                                    }
+                                    else if(result.code == 0)
+                                    {
+                                        fw.isLogin = true;
+                                        fw.user = result.user;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+			</script>
 		</div>
 		<div class="headerBottom">
 			<div class="hb_inner" style="width:1170px;height: 58px;">
 				<div class="hb_inner_left_logo">
 					<a href="#">
-						<img src="/static/img/myself/logo.271e845.png" style="width: 108px;height: 27px;">
+						<img src="/static/img/myself/logo_red.png" style="width: 108px;height: 27px;">
 					</a>
 				</div>
 				<div class="hb_inner_left_tag">
 					<a href="#">首页</a>&nbsp;/
-					<a href="#">时政</a>&nbsp;/
+					<!--<a href="#">时政</a>&nbsp;/-->
 					<span style="color: #999;" >正文</span>
 				</div>
 				<div class="hb_inner_right">
@@ -80,35 +130,116 @@
 					</div>
 				</div>
 				<div class="cl_text">
-					<h1 class="cl_text_title">习近平解题京津冀：三“力”协同促发展</h1>
-					<div class="cl_text_sub">
-						<span class="sub_original">原创</span>
-						<span>央视网新闻</span>
-						<span>2019-01-21 07:38:37</span>
-					</div>
-					<!-- 正文 -->
-					<div class="cl_text_content">
-						<p>
-							党的十八大以来，习近平总书记始终关心并指导京津冀协同发展。
-							新年伊始，习近平考察的第一站就选择了京津冀。
-							他提出，京津冀协同发展是一个系统工程，不可能一蹴而就，要做好长期作战的思想准备。
-							他要求，京津冀协同发展要“形成合力”、保持“历史耐心和战略定力”、 不断“向改革创新要动力”。
-                        </p>
-					</div>
-					
-					<!-- 收藏标签 -->
-					<div class="cl_text_tag">
-						<div class="cl_text_tag_left"></div>
-						<div class="cl_text_tag_right">
-							<div class="repin">
-								<img src="/static/img/myself/星星.png" style="width:20px;height:20px;"/>
-								<span>收藏</span>
-							</div>
+					<div id="contentVue">
+						<h1 class="cl_text_title">{{news.nTitle}}</h1>
+						<div class="cl_text_sub">
+							<span class="sub_original">{{news.nMenuid}}</span>
+							<span>{{user.uName}}</span>
+							<span>{{nCreattime}}</span>
+						</div>
+						<!-- 正文 -->
+						<div class="cl_text_content" v-html="news.nMessage">
+							 {{news.nMessage}}
 						</div>
 					</div>
-					
+					<script>
+                        var vm1 = new Vue({
+                            el:'#contentVue',
+                            data:{
+                                user:'',
+                                news:'',
+                                nCreattime:'',
+                            },
+                            created:function () {
+                                $.ajax({
+                                    type:'get',
+                                    url:'/news/getNews',
+                                    success:function (result) {
+                                        vm1.user = result.user;
+                                        vm1.news = result.news;
+                                        vm1.nCreattime = result.nCreattime;
+
+                                    }
+                                });
+                            }
+                        });
+					</script>
+
+						<!-- 收藏标签 -->
+						<div class="cl_text_tag" id="collectVue">
+							<div class="cl_text_tag_left"></div>
+							<div class="cl_text_tag_right">
+								<div class="repin">
+									<a  v-if="flag == 3">
+										<img src="/static/img/myself/xing_gray.png" style="width:20px;height:20px;" >
+									</a>
+									<a @click="collectNews()" v-else-if="flag == 0">
+										<img src="/static/img/myself/xing_gray.png" style="width:20px;height:20px;" id="xingxing">
+									</a>
+									<a @click="quxiaoNews()" v-else-if="flag == 1">
+										<img src="/static/img/myself/xing_yellow.png" style="width:20px;height:20px;" id="xingxing1">
+									</a>
+									<span>收藏</span>
+								</div>
+							</div>
+						</div>
+
+					<script>
+                        var vm3 = new Vue({
+                            el:'#collectVue',
+                            data:{
+								flag:''
+                            },
+                            created:function () {
+                                $.ajax({
+                                    type:'get',
+                                    url:'/news/collectShow',
+                                    success:function (result) {
+                                        vm3.flag = result.flag;
+                                    }
+                                });
+                            },
+							methods:{
+                                collectNews:function () {
+                                    document.getElementById("xingxing").src="/static/img/myself/xing_yellow.png";
+                                    $.ajax({
+										type:'post',
+										url:'/news/collect',
+										success:function (result) {
+											if(result.code == 0){
+											    alert("收藏成功");
+											    window.location.href="/news/details/"+result.newsId;
+											}
+											else if(result.code == 1){
+											    alert("收藏异常");
+                                                window.location.href="/news/details/"+result.newsId;
+											}
+                                        }
+									})
+                                },
+                                quxiaoNews:function () {
+                                    document.getElementById("xingxing1").src="/static/img/myself/xing_gray.png";
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/news/quxiao',
+                                        success:function (result) {
+                                            if(result.code == 0){
+                                                alert("取消收藏");
+                                                window.location.href="/news/details/"+result.newsId;
+                                            }
+                                            else if(result.code == 1){
+                                                alert("取消异常");
+                                                window.location.href="/news/details/"+result.newsId;
+                                            }
+                                        }
+                                    })
+                                }
+							}
+                        });
+					</script>
+
 					<!-- 评论模块 -->
-					<div class="cl_text_comment">
+					<div class="cl_text_comment" id="commentVue">
 						<div id="comment">
 							<div class="c_header">
 								<em>3177&nbsp;</em>
@@ -128,21 +259,36 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<!-- 用户评论 -->
 							<ul>
 								<li class="c_item">
 									<a href="#" class="avatar_wrap">
 										<img src="/static/img/a3.jpg" />
 									</a>
-									<div class="c_comment">
+									<div class="c_comment" style="margin-bottom: 10px;">
 										<div class="c_userinfo">
 											<a href="#" class="c_username">欧阳娜娜</a>
 											<span class="c_creatime">1天前</span>
 										</div>
 										<p>为习主席点赞</p>
+
 										<div class="c_footer">
-											<span class="c_reply">回复</span>
+											<span class="c_reply">
+												<span id="freply">回复</span>
+												<span id="show">
+													·&nbsp;查看1条回复
+													<strong>
+														∨
+													</strong>
+												</span>
+												<span id="hide">
+													·&nbsp;收起回复
+													<strong>
+														∧
+													</strong>
+												</span>
+											</span>
 											<span title="举报" class="c_report">
 												<img src="/static/img/myself/举报.png" class="c_icon"/>
 											</span>
@@ -152,6 +298,58 @@
 											</span>
 										</div>
 									</div>
+									<!-- 回复评论框 -->
+									<div class="c_inputbox" id="finput">
+
+										<div class="c_inputbox_right">
+											<div class="input_content">
+												<textarea placeholder="写下您的回复..."></textarea>
+											</div>
+											<div class="input_footer">
+												<div class="c_submit">
+													回复
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 子回复 -->
+									<div id="commentSon" style="margin: 10px 0px 10px 37px;">
+										<a href="#" class="avatar_wrap">
+											<img src="/static/img/a3.jpg" />
+										</a>
+										<div class="c_comment">
+											<div class="c_userinfo">
+												<a href="#" class="c_username">欧阳娜娜</a>
+												<span class="c_creatime">1天前</span>
+											</div>
+											<p>为习主席点赞</p>
+
+											<div class="c_footer">
+												<span class="c_reply">
+													<span id="sreply">回复</span>
+												</span>
+												<span title="点赞" class="c_like">
+													<span style="position: relative;top:2px">78</span>
+													<img src="/static/img/myself/点赞.png" class="c_icon"/>
+												</span>
+											</div>
+										</div>
+										<!-- 子回复评论框 -->
+										<div class="c_inputbox" id="sinput" style="margin-top: 10px;">
+
+											<div class="c_inputbox_right">
+												<div class="input_content">
+													<textarea placeholder="写下您的回复..."></textarea>
+												</div>
+												<div class="input_footer">
+													<div class="c_submit">
+														回复
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
 								</li>
 								<li class="c_item">
 									<a href="#" class="avatar_wrap">
@@ -174,52 +372,87 @@
 											</span>
 										</div>
 									</div>
-								</li>								
+								</li>
 							</ul>
 						</div>
 					</div>
+					<script>
+                        $("#commentSon").hide();
+                        $("#hide").hide();
+                        $("#show").click(function(){
+                            $("#commentSon").show();
+                            $("#show").hide();
+                            $("#hide").show();
+                        });
+
+                        $("#hide").click(function(){
+                            $("#commentSon").hide();
+                            $("#show").show();
+                            $("#hide").hide();
+                        });
+
+                        $("#finput").hide();
+                        $("#freply").click(function(){
+                            $("#finput").show();
+                        });
+
+                        $("#sinput").hide();
+                        $("#sreply").click(function(){
+                            $("#sinput").show();
+                        })
+
+					</script>
+
 				</div>
 			</div>
 			
 			<!-- 发文用户信息 和 相关推荐 -->
-			<div class="content_right">
+			<div class="content_right" id="userVue">
 				<div class="cr_userinfo">
 					<div class="cr_usercard">
 						<!-- 头部 -->
 						<div class="cr_usercard_header">
 							<a href="#" class="cr_usercard_avator">
-								<img src="/static/img/a6.jpg" />
+								<img :src="'/file/showImg/'+user.uImage" />
 							</a>
 							<div class="cr_usercard_name">
-								<a href="#">央视新闻网</a>
-								<button type="button" class="btn btn-success btn-sm cr_button" >
+								<a href="#">{{user.uName}}</a>
+								<button type="button" class="btn btn-success btn-sm" style="position: absolute;top:155px;">
 									关注
 								</button>
 							</div>
 						</div>
 						<!-- 新闻列表 -->
 						<ul class="cr_usercard_list">
-							<li class="cr_usercard_li">
+							<li class="cr_usercard_li" v-for="dt in newsList">
 								<div class="cr_dian"></div>
-								<a href="#">「18点见」“你想断子绝孙吗？”省教育厅核查高校奇葩试题</a>
+								<a href="#">{{dt.nTitle}}</a>
 							</li>
-							<li class="cr_usercard_li">
-								<div class="cr_dian"></div>
-								<a href="#">「18点见」“你想断子绝孙吗？”省教育厅核查高校奇葩试题</a>
-							</li>
-							<li class="cr_usercard_li">
-								<div class="cr_dian"></div>
-								<a href="#">「18点见」“你想断子绝孙吗？”省教育厅核查高校奇葩试题</a>
-							</li>														
 						</ul>
 					</div>
 				</div>
 			</div>
+			<script>
+                var vm2 = new Vue({
+                    el:'#userVue',
+                    data:{
+                        user:'',
+                        newsList:'',
+                    },
+                    created:function () {
+                        $.ajax({
+                            type:'get',
+                            url:'/news/getUser',
+                            success:function (result) {
+                                vm2.user = result.user;
+                                vm2.newsList = result.newsList;
+
+                            }
+                        });
+                    }
+                });
+			</script>
 		</div>
-		
-		
-	    <!-- 全局js -->
-		<script src="/static/js/jquery.min.js?v=2.1.4"></script>
-		<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+
 	</body>
 </html>

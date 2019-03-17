@@ -1,21 +1,142 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.winter.mapper.NewsMapper" >
-  <resultMap id="BaseResultMap" type="com.winter.model.News" >
+  <resultMap id="News" type="com.winter.model.News" >
     <id column="n_id" property="nId" jdbcType="VARCHAR" />
     <result column="n_menuid" property="nMenuid" jdbcType="VARCHAR" />
     <result column="n_userid" property="nUserid" jdbcType="VARCHAR" />
+    <result column="n_state" property="nState" jdbcType="VARCHAR" />
     <result column="n_title" property="nTitle" jdbcType="VARCHAR" />
     <result column="n_cover" property="nCover" jdbcType="VARCHAR" />
     <result column="n_message" property="nMessage" jdbcType="VARCHAR" />
-    <result column="n_creattime" property="nCreattime" jdbcType="DATE" />
-    <result column="n_updatetime" property="nUpdatetime" jdbcType="DATE" />
+    <result column="n_creattime" property="nCreattime" jdbcType="TIMESTAMP" />
+    <result column="n_updatetime" property="nUpdatetime" jdbcType="TIMESTAMP" />
     <result column="n_commentnum" property="nCommentnum" jdbcType="INTEGER" />
     <result column="n_browsenum" property="nBrowsenum" jdbcType="INTEGER" />
+    <result column="n_likenum" property="nLikenum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     n_id, n_menuid, n_userid, n_title, n_cover, n_message, n_creattime, n_updatetime, 
-    n_commentnum, n_browsenum
+    n_commentnum, n_browsenum,n_likenum,n_state
   </sql>
 
+  <select id="getHotTechnology" resultMap="News">
+    select *
+    FROM news
+    where n_menuid = '科技'
+
+    and n_browsenum = (select MAX(news.n_browsenum)
+                       FROM news
+                       where n_menuid='科技')
+  </select>
+  <select id="getHotSports" resultMap="News">
+    select *
+    FROM news
+    where n_menuid = '体育'
+
+    and n_browsenum = (select MAX(news.n_browsenum)
+                       FROM news
+                       where n_menuid='体育')
+  </select>
+  <select id="getHotEntertainment" resultMap="News">
+    select *
+    FROM news
+    where n_menuid = '娱乐'
+
+    and n_browsenum = (select MAX(news.n_browsenum)
+                       FROM news
+                       where n_menuid='娱乐')
+  </select>
+  <select id="getHotSociety" resultMap="News">
+    select *
+    FROM news
+    where n_menuid = '社会'
+
+    and n_browsenum = (select MAX(news.n_browsenum)
+                       FROM news
+                       where n_menuid='社会')
+  </select>
+  <select id="getHotGame" resultMap="News">
+    select *
+    FROM news
+    where n_menuid = '游戏'
+
+    and n_browsenum = (select MAX(news.n_browsenum)
+                       FROM news
+                       where n_menuid='游戏')
+  </select>
+
+  <select id="getHotNews" resultMap="News">
+    select *
+    from news
+    where n_state = '已发表'
+    order by n_browsenum desc
+    limit 0,5
+  </select>
+
+  <select id="getHotFiveNews" resultMap="News">
+    select *
+    from news
+    where n_userid = #{userId}
+    and n_state = '已发表'
+    order by n_browsenum desc
+    limit 0,5
+  </select>
+
+  <select id="getBrowseSum" resultType="INTEGER">
+    select sum(n_browsenum)
+    from news
+    where n_userid = #{userId}
+    and n_state = '已发表'
+  </select>
+
+  <select id="getNewsSum" resultType="INTEGER">
+    select count(*)
+    from news
+    where n_userid = #{userId}
+    and n_state != '审核中'
+  </select>
+
+  <select id="getFreshNews" resultMap="News">
+    select *
+    from news
+    where n_userid = #{userId}
+    and n_state = '已发表'
+    order by n_creattime desc
+    limit 0,3
+  </select>
+
+  <select id="getFabiaoCount" resultType="INTEGER">
+    select count(*)
+    from news
+    where n_userid = #{userId}
+    and n_state = '已发表'
+  </select>
+  <select id="getNofabiaoCount" resultType="INTEGER">
+    select count(*)
+    from news
+    where n_userid = #{userId}
+    and n_state = '未通过'
+  </select>
+  <select id="getCaogaoCount" resultType="INTEGER">
+    select count(*)
+    from news
+    where n_userid = #{userId}
+    and n_state = '草稿'
+  </select>
+  <select id="getChehuiCount" resultType="INTEGER">
+    select count(*)
+    from news
+    where n_userid = #{userId}
+    and n_state = '已撤回'
+  </select>
+
+  <select id="getAllnews" resultMap="News">
+    select *
+    from news
+    where n_userid = #{userId}
+    and n_state != '审核中'
+
+    order by n_creattime desc
+  </select>
 </mapper>

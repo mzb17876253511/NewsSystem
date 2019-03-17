@@ -1,0 +1,234 @@
+[v-cloak] {
+	display: none;
+}
+
+a{
+	text-decoration:none;
+}
+
+ul{
+	list-style: none;
+}
+
+
+body{
+	font-family: PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,Helvetica Neue,Arial,sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #657180;
+    background-color:#f4f5f6;
+}
+
+article, aside, blockquote, body, button, dd, details, div,
+ dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, 
+ header, hgroup, hr, input, legend, li, menu, nav, ol, p, section, td, textarea, th, ul{
+	margin: 0;
+    padding: 0;
+}
+
+.headerTop{
+	width: 100%;
+	min-width: 1220px;
+	line-height: 34px;
+	height: 34px;
+	background: #222;
+	font-size: 14px;
+    color: #fff;
+}
+
+.headerTop .ht_left{
+	float:left;
+}
+
+.headerTop .ht_right{
+	float: right;
+}
+
+.ul-nav-list{
+	list-style:none;
+	margin:0;
+}
+
+.ul-nav-list .nav-login{
+	border-right: dimgray 1px solid;
+	
+    width: 68px;
+	height: 34px;
+    text-align: center;
+	
+}
+.ul-nav-list .nav-login1{
+	border-right: dimgray 1px solid;
+	
+    width: 120px;
+	height: 34px;
+    text-align: center;
+}
+
+.ul-nav-list .nav-login1 .tb-link2{
+    color: #fff; 
+}
+
+
+.ul-nav-list .nav-text{
+    width: 68px;
+	height: 34px;
+    text-align: center;
+	
+}
+
+.ul-nav-list .nav-login .tb-link{
+	color: #fff;
+	
+}
+.ul-nav-list .nav-login .tb-link1{
+	color: #fff;
+	margin-right: 10px;
+}
+
+.headerBottom{
+	width: 100%;
+	height: 58px;
+	background: white;
+	box-shadow: 0 1px 4px 0 rgba(0,0,0,.12);
+}
+
+.headerBottom .hb_inner{
+	    margin: 0 auto;
+}
+
+.headerBottom .hb_inner .hb_inner_left_logo{
+	float:left;
+	line-height: 58px;
+    overflow: hidden;
+}
+
+.headerBottom .hb_inner .hb_inner_left_tag{
+	float:left;
+	font-size: 16px;
+    margin-left: 20px;
+    line-height: 58px;
+}
+
+.headerBottom .hb_inner .hb_inner_left_tag a{
+	color: #444;
+}
+
+.hb_inner_right{
+	float: right;
+	margin-top: 7px;
+}
+
+.content_right_search{
+	width: 340px;
+	height: 44px;
+	/* background: gray; */
+}
+.search_input{
+	float: left;
+	width: 262px;
+	height: 44px;
+	background-color:#f5f6f7;
+	border: 1px solid #e8e8e8;
+	border-radius: 4px;
+	padding: 3px 10px;
+	color: #1f2d3d;
+	transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+	font-size: 15px;
+}
+
+.search_button{
+	width: 78px;
+	height: 43px;
+	background: #208eda;
+	border: 1px solid #208eda;
+	color: #fff;
+    position: relative;
+	padding: 0 18px;
+	border-radius: 2px;
+	position: relative;
+	left: -3px;
+	top:0px;
+	font-size: 15px;
+}
+
+
+/* 以下为 content 的CSS */
+.content{
+	width: 1060px;
+	margin: 0 auto;
+	margin-top: 16px;
+}
+
+.contentHeader{
+	width: 1060px;
+	margin: 0 auto;
+	margin-top: 16px;
+	background: white;
+	min-height: 120px;
+}
+
+.contentHeader img{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+.contentHeader .name{
+	font-size: 24px;
+	font-weight: 700;
+	color: #222;
+	position: relative;
+	top:10px;
+	left:20px;
+}
+.contentHeader .join{
+	float:right;
+	position: relative;
+	top:43px;
+	right: 50px;
+}
+
+.bottomLeft{
+	float: left;
+	width: 700px;
+	height: auto;
+	background: white;
+	margin-top: 10px;
+}
+.bottomLeft .title_box{
+    font-size: 20px;
+    color: #999;
+    margin-bottom: 4px;
+    font-weight: 550;
+}
+
+.bottomLeft .content_box{
+	color: #999;
+	margin-top: 10px;
+}
+
+.bottomRight{
+	width: 340px;
+	height: 82px;
+	float:right;
+	background: white;
+	margin-top: 10px;
+	padding: 10px 18px 15px 18px;
+}
+
+.bottomRight .br_left{
+	float: left;
+	
+	width: 150px;
+	text-align: center;
+	border-right: 1px solid gainsboro;
+}
+
+.bottomRight .br_right{
+	float: right;
+	
+	width: 150px;
+	text-align: center;
+}

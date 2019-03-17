@@ -6,101 +6,11 @@
     <result column="m_userid" property="mUserid" jdbcType="VARCHAR" />
     <result column="m_fid" property="mFid" jdbcType="VARCHAR" />
     <result column="m_name" property="mName" jdbcType="VARCHAR" />
-    <result column="m_creattime" property="mCreattime" jdbcType="DATE" />
-    <result column="m_updatetime" property="mUpdatetime" jdbcType="DATE" />
+    <result column="m_creattime" property="mCreattime" jdbcType="TIMESTAMP" />
+    <result column="m_updatetime" property="mUpdatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     m_id, m_userid, m_fid, m_name, m_creattime, m_updatetime
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from menu
-    where m_id = #{mId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from menu
-    where m_id = #{mId,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.winter.model.Menu" >
-    insert into menu (m_id, m_userid, m_fid, 
-      m_name, m_creattime, m_updatetime
-      )
-    values (#{mId,jdbcType=VARCHAR}, #{mUserid,jdbcType=VARCHAR}, #{mFid,jdbcType=VARCHAR}, 
-      #{mName,jdbcType=VARCHAR}, #{mCreattime,jdbcType=DATE}, #{mUpdatetime,jdbcType=DATE}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.winter.model.Menu" >
-    insert into menu
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="mId != null" >
-        m_id,
-      </if>
-      <if test="mUserid != null" >
-        m_userid,
-      </if>
-      <if test="mFid != null" >
-        m_fid,
-      </if>
-      <if test="mName != null" >
-        m_name,
-      </if>
-      <if test="mCreattime != null" >
-        m_creattime,
-      </if>
-      <if test="mUpdatetime != null" >
-        m_updatetime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="mId != null" >
-        #{mId,jdbcType=VARCHAR},
-      </if>
-      <if test="mUserid != null" >
-        #{mUserid,jdbcType=VARCHAR},
-      </if>
-      <if test="mFid != null" >
-        #{mFid,jdbcType=VARCHAR},
-      </if>
-      <if test="mName != null" >
-        #{mName,jdbcType=VARCHAR},
-      </if>
-      <if test="mCreattime != null" >
-        #{mCreattime,jdbcType=DATE},
-      </if>
-      <if test="mUpdatetime != null" >
-        #{mUpdatetime,jdbcType=DATE},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.winter.model.Menu" >
-    update menu
-    <set >
-      <if test="mUserid != null" >
-        m_userid = #{mUserid,jdbcType=VARCHAR},
-      </if>
-      <if test="mFid != null" >
-        m_fid = #{mFid,jdbcType=VARCHAR},
-      </if>
-      <if test="mName != null" >
-        m_name = #{mName,jdbcType=VARCHAR},
-      </if>
-      <if test="mCreattime != null" >
-        m_creattime = #{mCreattime,jdbcType=DATE},
-      </if>
-      <if test="mUpdatetime != null" >
-        m_updatetime = #{mUpdatetime,jdbcType=DATE},
-      </if>
-    </set>
-    where m_id = #{mId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.winter.model.Menu" >
-    update menu
-    set m_userid = #{mUserid,jdbcType=VARCHAR},
-      m_fid = #{mFid,jdbcType=VARCHAR},
-      m_name = #{mName,jdbcType=VARCHAR},
-      m_creattime = #{mCreattime,jdbcType=DATE},
-      m_updatetime = #{mUpdatetime,jdbcType=DATE}
-    where m_id = #{mId,jdbcType=VARCHAR}
-  </update>
+
 </mapper>

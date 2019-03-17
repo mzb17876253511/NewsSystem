@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
+    <link href="/static/css/zpageNav.css" rel="stylesheet">
     <script src="/static/js/jquery.min.js?v=2.1.4"></script>
     <script src="/static/js/vue.js"></script>
+    <script src="/static/js/zpageNav.js"></script>
+
 
 </head>
 <body>
@@ -25,46 +28,52 @@
             </td>
         </tr>
     </table>
+    <!-- pagination start-->
+    <div class="wrap" id="wrap">
+        <zpagenav v-bind:page="page" v-bind:page-size="pageSize" v-bind:total="total"
+                  v-bind:max-page="maxPage"  v-on:pagehandler="pageHandler">
+            <zpagenav>
+    </div>
 
-    <div style="width: 200px;height: 150px;margin-left: 450px;background: pink;position: absolute;top:15px;">
+
+<!--    <div style="width: 200px;height: 150px;margin-left: 450px;background: pink;position: absolute;top:15px;">
         <form  method="post" action="/add">
             姓名：<input name="tname" type="text"/><br/>
             手机：<input name="phone" type="text"/><br/><hr/>
             <button type="submit">添加</button>
         </form>
-    </div>
+    </div>-->
 
     <script>
         /* 显示 */
-        var testlist = new Vue({
-            el:'#testVue',
+        var vm = new Vue({
+            el:'#wrap',
             data:{
-                testList:''
+                testList:'',
+                page:1,
+                pageSize:'',
+                total:'',
+                maxPage:''
             },
             created:function () {
+                this.pageHandler(1);
                 $.ajax({
-                    type:'get',
-                    url:'/list',
+                    type:"post",
+                    url:'/test/page/'+1,
                     success:function (result) {
                         console.log(result);
-                        testlist.testList = result;
+                        vm.testList  = result.pageinfo.list;
+                        vm.pageSize  = result.pageinfo.pageSize;
+                        vm.total  = result.pageinfo.total;
+                        vm.maxPage = result.pageinfo.lastPage;
                     }
-                })
+                });
             },
             methods:{
-                dell:function() {
-                    alert("hello");
-     /*               $.ajax({
-                        type:'POST',
-                        url:'/delete/'+id,
-                        success:function (result) {
-                            if(result){
-                                window.location.href="/test";
-                            }else{
+                pageHandler: function (page) {
 
-                            }
-                        }
-                    })*/
+                    this.page = page;
+
                 }
             }
         });

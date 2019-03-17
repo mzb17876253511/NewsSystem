@@ -2,15 +2,19 @@ package com.winter.model;
 
 
 
+import com.baomidou.mybatisplus.annotations.TableId;
+
 import java.util.Date;
 
 public class News {
-
+    @TableId(value="n_id")
     private String nId;
 
     private String nMenuid;
 
     private String nUserid;
+
+    private String nState;
 
     private String nTitle;
 
@@ -26,12 +30,30 @@ public class News {
 
     private Integer nBrowsenum;
 
-    public String getnId() {
+    private Integer nLikenum;
+
+    public String getNId() {
         return nId;
     }
 
-    public void setnId(String nId) {
-        this.nId = nId == null ? null : nId.trim();
+    public void setNId(String nId) {
+        this.nId = nId;
+    }
+
+    public String getnState() {
+        return nState;
+    }
+
+    public void setnState(String nState) {
+        this.nState = nState;
+    }
+
+    public Integer getnLikenum() {
+        return nLikenum;
+    }
+
+    public void setnLikenum(Integer nLikenum) {
+        this.nLikenum = nLikenum;
     }
 
     public String getnMenuid() {

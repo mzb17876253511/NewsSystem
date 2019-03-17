@@ -1,0 +1,509 @@
+[v-cloak] {
+    display: none;
+}
+
+a{
+	text-decoration:none;
+}
+
+ul{
+	list-style: none;
+}
+
+
+body{
+	font-family: PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,Helvetica Neue,Arial,sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #657180;
+    background-color: #fff;
+}
+
+article, aside, blockquote, body, button, dd, details, div,
+ dl, dt, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, 
+ header, hgroup, hr, input, legend, li, menu, nav, ol, p, section, td, textarea, th, ul{
+	margin: 0;
+    padding: 0;
+}
+
+.headerTop{
+	width: 100%;
+	min-width: 1220px;
+	line-height: 34px;
+	height: 34px;
+	background: #222;
+	font-size: 14px;
+    color: #fff;
+}
+
+.headerTop .ht_left{
+	float:left;
+}
+
+.headerTop .ht_right{
+	float: right;
+}
+
+.ul-nav-list{
+	list-style:none;
+	margin:0;
+}
+
+.ul-nav-list .nav-login{
+	background-color: #ed4040;
+    width: 68px;
+	height: 34px;
+    text-align: center;
+	
+}
+
+.ul-nav-list .nav-text{
+    width: 68px;
+	height: 34px;
+    text-align: center;
+	
+}
+
+.ul-nav-list .nav-login .tb-link{
+	color: #fff;
+	
+}
+.ul-nav-list .nav-login .tb-link1{
+	color: #fff;
+	margin-right: 10px;
+}
+
+.headerBottom{
+	width: 100%;
+	height: 58px;
+	background: white;
+	box-shadow: 0 1px 4px 0 rgba(0,0,0,.12);
+}
+
+.headerBottom .hb_inner{
+	    margin: 0 auto;
+}
+
+.headerBottom .hb_inner .hb_inner_left_logo{
+	float:left;
+	line-height: 58px;
+    overflow: hidden;
+}
+
+.headerBottom .hb_inner .hb_inner_left_tag{
+	float:left;
+	font-size: 16px;
+    margin-left: 20px;
+    line-height: 58px;
+}
+
+.headerBottom .hb_inner .hb_inner_left_tag a{
+	color: #444;
+}
+
+.hb_inner_right{
+	float: right;
+	margin-top: 7px;
+}
+
+.content_right_search{
+	width: 340px;
+	height: 44px;
+	/* background: gray; */
+}
+.search_input{
+	float: left;
+	width: 262px;
+	height: 44px;
+	background-color:#f5f6f7;
+	border: 1px solid #e8e8e8;
+	border-radius: 4px;
+	padding: 3px 10px;
+	color: #1f2d3d;
+	transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+	font-size: 15px;
+}
+
+.search_button{
+	width: 78px;
+	height: 43px;
+	background: #208eda;
+	border: 1px solid #208eda;
+	color: #fff;
+    position: relative;
+	padding: 0 18px;
+	border-radius: 2px;
+	position: relative;
+	left: -3px;
+	top:0px;
+	font-size: 15px;
+}
+
+
+/* 以下为 content 的CSS */
+.content{
+	width: 1170px;
+	margin: 0 auto;
+	margin-top: 16px;
+	min-height: 1500px;
+}
+
+.content .content_left{
+	float: left;
+	width: 830px;
+
+}
+
+.content .content_left .cl_nav{
+	float: left;
+	width: 110px;
+	height: 300px;
+	/* background: yellow; */
+}
+
+.share-box{
+	margin-top: 20px;
+}
+
+.share-box .share-count {
+    display: block;
+    margin-bottom: 14px;
+}
+
+.share-box .share-text{
+	font: 20px/24px Georgia;
+    color: #f85959;
+    padding-left: 0px;
+}
+.share-hr{
+	background: #e8e8e8;
+    height: 1px;
+}
+
+.share-box .share-type {
+    
+    font-size: 16px;
+    cursor: pointer;
+	margin-top: 18px;
+}
+
+.share-box .repost-img{
+	float: left;
+    width: 34px;
+    height: 34px;
+    margin-top: -3px;
+}
+
+
+
+.share-box .share-type span {
+    vertical-align: middle;
+    padding-left: 12px;
+    font-size: 16px;
+}
+
+.content .content_left .cl_text{
+	float: right;
+	width: 660px;
+	height: 1500px;
+	
+	margin-right: 30px;
+}
+
+.content .content_left .cl_text .cl_text_title{
+	font-size: 34px;
+    font-weight: 700;
+    line-height: 44px;
+    color: #222;
+}
+
+.content .content_left .cl_text .cl_text_sub{
+    margin-top: 12px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}	
+
+.content .content_left .cl_text .cl_text_sub .sub_original {
+    display: inline-block;
+    padding: 2px;
+    border: 1px solid #999;
+    line-height: 12px;
+}
+	
+.content .content_left .cl_text .cl_text_content{
+	font-size: 16px;
+    line-height: 28px;
+    color: #222;
+    word-wrap: break-word;
+	margin-bottom: 20px;
+}	
+
+.content .content_left .cl_text .cl_text_tag{
+	margin-bottom: 28px;
+}
+
+.content .content_left .cl_text .cl_text_tag .cl_text_tag_left{
+	float: left;
+}
+.content .content_left .cl_text .cl_text_tag .cl_text_tag_right{
+	float:right;
+	position: relative;
+
+}
+.repin{
+	display: inline-block;
+}
+.repin span {
+    color: #999;
+    font-size: 14px;
+    padding-left:0px;
+	vertical-align: middle;
+}
+
+.content .content_left .cl_text .cl_text_comment{
+	margin: 50px 0px;
+}
+
+#comment .c_header{
+	position: relative;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#comment .c_header>em {
+    font: 22px/24px Georgia;
+    color: #f85959;
+}
+
+.c_inputbox .c_inputbox_left{
+	float: left;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 50%;
+    background: url(../../img/myself/user.png) no-repeat 50%;
+    overflow: hidden;
+}
+
+.c_inputbox .c_inputbox_right{
+	position: relative;
+    font-size: 16px;
+    color: #bababa;
+    border: 1px solid #3f404c;
+    background: #fff;
+    margin-left: 42px;
+    height: 44px;
+    box-sizing: content-box;
+	height: 167px;
+}
+
+.c_inputbox .c_inputbox_right .input_content{
+	background: #fff;
+    padding: 11px 16px 0;
+}
+
+.c_inputbox .c_inputbox_right .input_content textarea{
+	display: block;
+    font-size: 16px;
+    width: 100%;
+    height: 112px;
+    resize: none;
+    border: 0;
+    outline: 0;
+    padding: 0;
+    transition: all .4s;
+	color: black
+}
+
+.c_inputbox .c_inputbox_right .input_footer{
+	bottom: 0;
+    right: 0;
+    padding: 0;
+    border: none;
+    height: 44px;
+	position: relative;
+    background-color: #f4f5f6;
+}
+
+.c_inputbox .c_inputbox_right .input_footer .c_submit{
+	float: right;
+    line-height: 44px;
+    background-color: #3f404c;
+    width: 110px;
+    height: 100%;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+#comment .c_item:first-child {
+    margin-top: 22px;
+}
+
+#comment .c_item {
+    padding: 14px 0;
+    border-top: 1px solid #f2f2f2;
+}
+
+#comment .c_item .avatar_wrap{
+	float: left;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+#comment .avatar_wrap img {
+    width: 100%;
+    height: 100%;
+}
+
+.c_comment{
+	margin-left: 42px;
+    overflow: hidden;
+}
+.c_userinfo{
+	margin-bottom: 4px;
+}
+.c_username{
+	color: #406599;
+    cursor: pointer;
+}
+.c_item a, .c_item span{
+	font-size: 15px;
+}
+.c_creatime{
+	color: #777
+}
+
+.c_comment p {
+    font-size: 14px;
+    line-height: 22px;
+    color: #222;
+}
+.c_comment .c_footer {
+    margin-top: 6px;
+    font-size: 0;
+}
+.c_comment .c_reply{
+	color: #406599;
+    cursor: pointer;
+}
+.c_comment .c_report{
+	float: right;
+	margin-top: 1px;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+.c_comment .c_like{
+	float: right;
+    color: #777;
+    cursor: pointer;
+}
+
+.c_comment .c_icon{
+	color: #cacaca;
+    font-size: 14px;
+	font-family: tticons!important;
+    font-size: 12px;
+    display: inline-block;
+    line-height: 1;
+    speak: none;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+	width: 15px;
+	height: 15px;
+}
+
+/* 第三栏 */
+.content_right{
+	float: right;
+	width: 340px;
+	
+}
+.content_right .cr_userinfo{
+	width: 340px;
+    border-top: 2px solid #ed4040;
+    background-color: #f4f5f6;
+    margin-bottom: 16px;
+    padding: 15px 20px 20px;
+}
+
+.content_right .cr_usercard_header{
+	display: table;
+}
+
+.content_right .cr_usercard_avator{
+	float: left;
+    margin-right: 12px;
+    display: table-cell;
+    vertical-align: middle;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid #e8e8e8;
+    background: #ddd;
+    overflow: hidden;
+}
+
+.content_right .cr_usercard_avator>img{
+	width: 100%;
+	height: 100%;
+}
+.cr_usercard .cr_usercard_name{
+	display: table-cell;
+    vertical-align: middle;
+}
+
+.cr_usercard .cr_usercard_name a{
+	display: inline-block;
+    font-size: 17px;
+    line-height: 1;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 4px;
+	position: relative;
+	top:-10px;
+}
+.cr_button{
+	position: relative;
+	left:0px;
+	top:17px;
+}
+
+.cr_usercard_list{
+	margin-top: 16px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.cr_usercard_li{
+	margin-top: 12px;
+    line-height: 20px;
+    font-size: 14px;
+    padding-left: 9px;
+    position: relative;
+    text-align: justify;
+}
+
+.cr_usercard_li a{
+	color: #222;
+    line-height: 20px;
+}
+
+.cr_dian{
+	position: absolute;
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: #999;
+    left: 0;
+    top: 6px;
+}

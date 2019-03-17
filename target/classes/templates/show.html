@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <div id="show" v-html="news.nMessage">
+   {{news.nMessage}}
+   </div>
+   <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+   <script src="/static/js/vue.js"></script>
+   <script>
+       var vm = new Vue({
+           el:'#show',
+           data:{
+               news:''
+           },
+           created:function () {
+               $.ajax({
+                   type:'get',
+                   url:'/news/show',
+                   success:function (result) {
+                       console.log(result);
+                       vm.news = result;
+
+                   }
+               });
+           }
+
+
+       });
+   </script>
+</body>
+</html>

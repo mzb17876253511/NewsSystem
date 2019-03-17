@@ -1,3 +1,7 @@
+[v-cloak] {
+    display: none;
+}
+
 a{
 	text-decoration:none;
 }
@@ -359,51 +363,51 @@ article, aside, blockquote, body, button, dd, details, div,
     height: 100%;
 }
 
-#comment .c_comment{
+.c_comment{
 	margin-left: 42px;
     overflow: hidden;
 }
-#comment .c_userinfo{
+.c_userinfo{
 	margin-bottom: 4px;
 }
-#comment .c_username{
+.c_username{
 	color: #406599;
     cursor: pointer;
 }
-#comment .c_item a,#comment .c_item span{
+.c_item a,#comment .c_item span{
 	font-size: 15px;
 }
-#comment .c_creatime{
+.c_creatime{
 	color: #777
 }
 
-#comment .c_comment p {
+.c_comment p {
     font-size: 14px;
     line-height: 22px;
     color: #222;
 }
-#comment .c_comment .c_footer {
+.c_comment .c_footer {
     margin-top: 6px;
     font-size: 0;
 }
-#comment .c_comment .c_reply{
+.c_comment .c_reply{
 	color: #406599;
     cursor: pointer;
 }
-#comment .c_comment .c_report{
+.c_comment .c_report{
 	float: right;
 	margin-top: 1px;
     margin-left: 12px;
     cursor: pointer;
 }
 
-#comment .c_comment .c_like{
+.c_comment .c_like{
 	float: right;
     color: #777;
     cursor: pointer;
 }
 
-#comment .c_comment .c_icon{
+.c_comment .c_icon{
 	color: #cacaca;
     font-size: 14px;
 	font-family: tticons!important;
@@ -469,11 +473,6 @@ article, aside, blockquote, body, button, dd, details, div,
     margin-bottom: 4px;
 	position: relative;
 	top:-10px;
-}
-.cr_button{
-	position: relative;
-	left:-89px;
-	top:17px;
 }
 
 .cr_usercard_list{

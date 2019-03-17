@@ -5,113 +5,15 @@
     <id column="c_id" property="cId" jdbcType="VARCHAR" />
     <result column="c_fid" property="cFid" jdbcType="VARCHAR" />
     <result column="c_newsid" property="cNewsid" jdbcType="VARCHAR" />
+    <result column="c_userid" property="cUserid" jdbcType="VARCHAR" />
     <result column="c_tinynewsid" property="cTinynewsid" jdbcType="VARCHAR" />
-    <result column="c_creattime" property="cCreattime" jdbcType="DATE" />
-    <result column="c_updatetime" property="cUpdatetime" jdbcType="DATE" />
+    <result column="c_creattime" property="cCreattime" jdbcType="TIMESTAMP" />
+    <result column="c_updatetime" property="cUpdatetime" jdbcType="TIMESTAMP" />
     <result column="c_message" property="cMessage" jdbcType="VARCHAR" />
+    <result column="c_likenum" property="cLikenum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    c_id, c_fid, c_newsid, c_tinynewsid, c_creattime, c_updatetime, c_message
+    c_id, c_fid, c_newsid, c_tinynewsid, c_creattime, c_updatetime, c_message,c_userid,c_likenum
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from comment
-    where c_id = #{cId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from comment
-    where c_id = #{cId,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="com.winter.model.Comment" >
-    insert into comment (c_id, c_fid, c_newsid, 
-      c_tinynewsid, c_creattime, c_updatetime, 
-      c_message)
-    values (#{cId,jdbcType=VARCHAR}, #{cFid,jdbcType=VARCHAR}, #{cNewsid,jdbcType=VARCHAR}, 
-      #{cTinynewsid,jdbcType=VARCHAR}, #{cCreattime,jdbcType=DATE}, #{cUpdatetime,jdbcType=DATE}, 
-      #{cMessage,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.winter.model.Comment" >
-    insert into comment
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="cId != null" >
-        c_id,
-      </if>
-      <if test="cFid != null" >
-        c_fid,
-      </if>
-      <if test="cNewsid != null" >
-        c_newsid,
-      </if>
-      <if test="cTinynewsid != null" >
-        c_tinynewsid,
-      </if>
-      <if test="cCreattime != null" >
-        c_creattime,
-      </if>
-      <if test="cUpdatetime != null" >
-        c_updatetime,
-      </if>
-      <if test="cMessage != null" >
-        c_message,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="cId != null" >
-        #{cId,jdbcType=VARCHAR},
-      </if>
-      <if test="cFid != null" >
-        #{cFid,jdbcType=VARCHAR},
-      </if>
-      <if test="cNewsid != null" >
-        #{cNewsid,jdbcType=VARCHAR},
-      </if>
-      <if test="cTinynewsid != null" >
-        #{cTinynewsid,jdbcType=VARCHAR},
-      </if>
-      <if test="cCreattime != null" >
-        #{cCreattime,jdbcType=DATE},
-      </if>
-      <if test="cUpdatetime != null" >
-        #{cUpdatetime,jdbcType=DATE},
-      </if>
-      <if test="cMessage != null" >
-        #{cMessage,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.winter.model.Comment" >
-    update comment
-    <set >
-      <if test="cFid != null" >
-        c_fid = #{cFid,jdbcType=VARCHAR},
-      </if>
-      <if test="cNewsid != null" >
-        c_newsid = #{cNewsid,jdbcType=VARCHAR},
-      </if>
-      <if test="cTinynewsid != null" >
-        c_tinynewsid = #{cTinynewsid,jdbcType=VARCHAR},
-      </if>
-      <if test="cCreattime != null" >
-        c_creattime = #{cCreattime,jdbcType=DATE},
-      </if>
-      <if test="cUpdatetime != null" >
-        c_updatetime = #{cUpdatetime,jdbcType=DATE},
-      </if>
-      <if test="cMessage != null" >
-        c_message = #{cMessage,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where c_id = #{cId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.winter.model.Comment" >
-    update comment
-    set c_fid = #{cFid,jdbcType=VARCHAR},
-      c_newsid = #{cNewsid,jdbcType=VARCHAR},
-      c_tinynewsid = #{cTinynewsid,jdbcType=VARCHAR},
-      c_creattime = #{cCreattime,jdbcType=DATE},
-      c_updatetime = #{cUpdatetime,jdbcType=DATE},
-      c_message = #{cMessage,jdbcType=VARCHAR}
-    where c_id = #{cId,jdbcType=VARCHAR}
-  </update>
+
 </mapper>

@@ -1,5 +1,10 @@
+[v-cloak] {
+	display: none;
+}
+
 a{
 	text-decoration:none;
+	color: inherit;
 }
 
 ul{
@@ -166,7 +171,7 @@ article, aside, blockquote, body, button, dd, details, div,
 	color: #41baad;
 	margin-right: 10px;
 	border: 1px solid #41baad;
-	padding: 1px :;px;
+	padding: 1px;
 }
 
 .foot_bar_left .foot_bar_left_img{
@@ -287,6 +292,63 @@ article, aside, blockquote, body, button, dd, details, div,
 	border-radius: 25px;
 	padding: 6px;
 }
+
+.logout{
+	font-size: 12px;
+    line-height: 17px;
+    text-align: right;
+	
+}
+.loginImg{
+	width: 56px;
+    height: 56px;
+    margin-top: -5px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+.loginName{
+	margin-top: 7px;
+    font-size: 16px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	color: black;
+}
+.loginHead{
+	position: relative;
+	top:-4px;
+}
+.loginBottom{
+	
+}
+.loginBottom .botleft{
+	float: left;
+	margin-left: 40px;
+}
+.loginBottom .botright{
+	float: right;
+	margin-right: 40px;
+}
+.num{
+	width: auto;
+    margin-bottom: 2px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    color: #222;
+}
+.line{
+	position: relative;
+	top:-7px;
+	float: left;
+    margin-left: 55px;
+    width: 1px;
+    height: 64px;
+    transform: scale(.5);
+    background: #e8e8e8;
+}
+
 
 .content .content_right .content_right_hotnews{
 	width: 340px;

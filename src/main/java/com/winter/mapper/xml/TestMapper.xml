@@ -9,7 +9,10 @@
     <sql id="Base_Column_List" >
       id, tname, phone
     </sql>
-
+    <select id="getTestListCount" resultType="int">
+        select count(*)
+        from test
+    </select>
 
 
 

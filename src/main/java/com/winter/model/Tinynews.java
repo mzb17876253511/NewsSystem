@@ -1,11 +1,8 @@
 package com.winter.model;
 
-
-
 import java.util.Date;
 
 public class Tinynews {
-
     private String tId;
 
     private String tUserid;

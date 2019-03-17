@@ -13,27 +13,52 @@
 		<!-- 其他CSS -->
 		<link href="/static/css/myself/fawen.css" rel="stylesheet" />
 		<link href="/static/css/myself/fawen_textManager.css" rel="stylesheet" />
+		<link href="/static/css/myself/page.css" rel="stylesheet" />
+
+		<!-- 全局js -->
+		<script src="/static/js/jquery.min.js?v=2.1.4"></script>
+		<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="/static/js/vue.js"></script>
 	</head>
-	<body class>
+	<body>
 		<div class="header">
 		  <div class="header_inner">
 			  <a href="#" class="inner_logo">
-				  头条号
+				  先锋资讯
 			  </a>
-			  <div class="inner_right">
+			  <div class="inner_right" id="loginVue">
 				  <div class="ir_list">
 					  
 				  </div>
 				  <div class="ir_username">
-	                   <span>欧阳娜娜拉大提琴</span>
+	                   <span>{{user.uName}}</span>
 				  </div>
 				  <div class="ir_touxiang">
-					   <img src="/static/img/a6.jpg" class="ir_touxiang_img"/>
+					   <img :src="imgPath" class="ir_touxiang_img"/>
 				  </div>
 				  <div class="ir_msg">
 				       <img src="/static/img/myself/信封.png" class="ir_msg_img" />
 				  </div>
 			  </div>
+			  <script>
+                  var vm = new Vue({
+                      el:'#loginVue',
+                      data:{
+                          user:'',
+                          imgPath:''
+                      },
+                      created:function () {
+                          $.ajax({
+                              type:'get',
+                              url:'/login/getUserinfo',
+                              success:function (result) {
+                                  vm.user = result.user;
+                                  vm.imgPath =result.imgPath;
+                              }
+                          })
+                      }
+                  });
+			  </script>
 		  </div>
 		</div>
 		<div class="content">
@@ -43,30 +68,30 @@
 						<span class="garr-sub-menu">
 							<div style="float: left;">
 								<img src="/static/img/profile_small.jpg" class="nt_img"/>
-								今日头条
+								先锋资讯
 							</div>
 							<div class="nt_up"></div>
 						</span>
 					</div>
                     <ul>
 						<li class="nav_li">
-							<a href="#" class="">主页</a>
+							<a href="/fawen/index1" class="">主页</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">发文章</a>
+							<a href="/fawen/textEdiot" class="">发文章</a>
 						</li>
-						<li class="nav_li nav_li_active">
-							<a href="#" class="">内容管理</a>
+						<li class="nav_li nav_li_active" style=" background-color: #f85959;color: white;">
+							<a href="/fawen/textManager" class="">内容管理</a>
 						</li>
 						<li class="nav_li">
 							<a href="#" class="">评论管理</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">帐号设置</a>
+							<a href="/fawen/userinfo" class="">帐号设置</a>
 						</li>	
-						<li class="nav_li">
+						<!--<li class="nav_li">
 							<a href="#" class="">系统通知</a>
-						</li>																															
+						</li>	-->
 					</ul>
 				</div>
 			</div>
@@ -83,7 +108,7 @@
 					</div>
 				</div>
 			    <!-- 用来关闭的div 文章部分-->
-				<div>
+
 					<div class="text_state">
 						<div class="ts_top">
 							<span class="state_title">文章状态</span>
@@ -100,35 +125,229 @@
 						</div>
 					</div>				
 					<!-- 文章列表 -->
-					<div class="text_list" id="i11">
+					<div id="allnewsVue">
+						<div class="text_list" id="i11">
+							<div class="search_result">
+								共找到了
+								<span style="color: red;">{{newsCount}}</span>
+								条符合条件的内容
+							</div>
+							<div class="list_item" v-for="dt in newsList">
+								<div class="item_wrap">
+									<div style="float: left;">
+										<div class="iw_title">
+											{{dt.news.nTitle}}
+										</div>
+										<div class="iw_tag">
+											<span class="article-status-label" v-if="dt.news.nState == '草稿'">
+												草稿
+											</span>
+											<span class="article-status-label1" v-else-if="dt.news.nState == '已发表'">
+												已发表
+											</span>
+											<span class="article-status-label2" v-else-if="dt.news.nState == '未通过'">
+												未通过
+											</span>
+											<span class="article-status-label3" v-else-if="dt.news.nState == '已撤回'">
+												已撤回
+											</span>
+										</div>
+										<div>
+											<span class="create-time">
+												{{dt.creattime}}
+											</span>
+										</div>
+									</div>
+									<!-- 右边的按钮 -->
+									<div class="item_right">
+										<ul>
+											<li style="margin-top: 10px;" v-if="dt.news.nState == '草稿'">
+												<button type="button" class="btn btn-outline btn-danger">修改</button>
+											</li>
+											<li style="margin-top: 10px;" v-if="dt.news.nState == '已发表'">
+												<button type="button" class="btn btn-outline btn-success" @click="chehui(dt.news.nid)">撤回</button>
+											</li>
+											<li style="margin-top: 10px;">
+												 <button type="button" class="btn btn-outline btn-default" @click="delNews(dt.news.nid)">删除</button>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<!-- 分页 -->
+							<div style="margin-bottom: 10px;margin-left: 230px;">
+								<div class="page-break" >
+									<ul>
+										<li v-if="cur>1">
+											<a @click="jumpUp(cur)">上一页</a>
+										</li>
+										<li v-if="cur==1">
+											<a class="banclick">上一页</a>
+										</li>
+										<li v-for="item in indexs" :class="{'active':cur==item}">
+											<a @click="btnClick(item)">{{item}}</a>
+										</li>
+										<li v-if="cur!=all">
+											<a @click="jumpDown(cur)">下一页</a>
+										</li>
+										<li v-if="cur==all">
+											<a class="banclick">下一页</a>
+										</li>
+										<li><a>共<i>{{all}}</i>页</a></li>
+									</ul>
+								</div>
+							</div>
+					    </div>
+					</div>
+					<script>
+                        var vm = new Vue({
+                            el:'#allnewsVue',
+                            data:{
+								newsCount:'',
+                                newsList:'',
+								all:'',
+                                cur:1
+                            },
+                            created:function () {
+                                $.ajax({
+                                    type:'post',
+									url:'/fawen/textManager/all/'+this.cur,
+									success:function (result) {
+                                        console.log(result);
+									   	vm.newsCount = result.newsCount;
+									   	vm.newsList = result.pageinfo.list;
+									   	vm.all = result.pageCount;
+                                    }
+                                });
+                            },
+							methods:{
+                                btnClick(num){
+                                    if(num!=this.cur){
+                                        this.cur = num;
+									}
+									$.ajax({
+                                        type:'post',
+                                        url:'/fawen/textManager/all/'+num,
+                                        success:function (result) {
+
+                                            vm.newsCount = result.newsCount;
+                                            vm.newsList = result.pageinfo.list;
+                                            vm.all = result.pageCount;
+                                        }
+									})
+								},
+								jumpUp(num){
+                                    num = num -1;
+                                    if(num!=this.cur){
+                                        this.cur = num;
+                                    }
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/textManager/all/'+num,
+                                        success:function (result) {
+                                            vm.newsCount = result.newsCount;
+                                            vm.newsList = result.pageinfo.list;
+                                            vm.all = result.pageCount;
+                                        }
+                                    })
+								},
+								jumpDown(num){
+                                    num = num +1;
+                                    if(num!=this.cur){
+                                        this.cur = num;
+                                    }
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/textManager/all/'+num,
+                                        success:function (result) {
+                                            vm.newsCount = result.newsCount;
+                                            vm.newsList = result.pageinfo.list;
+                                            vm.all = result.pageCount;
+                                        }
+                                    })
+                                },
+								delNews(newsId){
+                                    $.ajax({
+										type:'post',
+										url:'/fawen/delete/'+newsId,
+										success:function (result) {
+											if(result.code == 0){
+											    alert("删除文章成功");
+												window.location.href="/fawen/textManager";
+											}else{
+											    alert("删除文章失败");
+                                                window.location.href="/fawen/textManager";
+											}
+                                        }
+									})
+								},
+                                chehui(newsId){
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/chehui/'+newsId,
+                                        success:function (result) {
+                                            if(result.code == 0){
+                                                alert("撤回文章成功");
+                                                window.location.href="/fawen/textManager";
+                                            }else{
+                                                alert("撤回文章失败");
+                                                window.location.href="/fawen/textManager";
+                                            }
+                                        }
+                                    })
+                                }
+							},
+                            computed: {
+                                indexs() {
+                                    var left = 1;
+                                    var right = this.all;
+                                    var arr = [];
+                                    if (this.all >= 7) {
+                                        if (this.cur > 4 && this.cur < this.all - 3) {
+                                            left = this.cur - 3;
+                                            right = this.cur + 3;
+                                        } else if (this.cur <= 4) {
+                                            left = 1;
+                                            right = 7;
+                                        } else {
+                                            left = this.all - 6;
+                                            right = this.all;
+                                        }
+                                    }
+                                    while (left <= right) {
+                                        arr.push(left);
+                                        left++;
+                                    }
+                                    return arr;
+                                }
+                            }
+
+                        });
+
+					</script>
+
+					<!-- 已发表 -->
+					<div class="text_list" id="i22">
 						<div class="search_result">
 							共找到了
-							<span style="color: red;">2</span>
+							<span style="color: red;">{{newsCount}}</span>
 							条符合条件的内容
 						</div>
-						<div class="list_item">
+						<div class="list_item" v-for="dt in newsList">
 							<div class="item_wrap">
 								<div style="float: left;">
 									<div class="iw_title">
-										这是一个新闻题目
+										{{dt.news.nTitle}}
 									</div>
 									<div class="iw_tag">
-										<span class="article-status-label">
-											草稿
-										</span>
 										<span class="article-status-label1">
 											已发表
-										</span>
-										<span class="article-status-label2">
-											未通过
-										</span>
-										<span class="article-status-label3">
-											已撤回
 										</span>
 									</div>
 									<div>
 										<span class="create-time">
-											2019-01-27 00:08
+											{{dt.creattime}}
 										</span>
 									</div>
 								</div>
@@ -136,65 +355,179 @@
 								<div class="item_right">
 									<ul>
 										<li style="margin-top: 10px;">
-											<button type="button" class="btn btn-outline btn-danger">修改</button>
+											<button type="button" class="btn btn-outline btn-success" @click="chehui(dt.news.nid)">撤回</button>
 										</li>
 										<li style="margin-top: 10px;">
-											 <button type="button" class="btn btn-outline btn-default">删除</button>
+											 <button type="button" class="btn btn-outline btn-default" @click="delNews(dt.news.nid)">删除</button>
 										</li>
 									</ul>
 								</div>
 							</div>
 						</div>
 
-					</div>		
-					<div class="text_list" id="i22">
-						<div class="search_result">
-							共找到了
-							<span style="color: red;">2</span>
-							条符合条件的内容
-						</div>
-						<div class="list_item">
-							<div class="item_wrap">
-								<div style="float: left;">
-									<div class="iw_title">
-										这是一个新闻题目
-									</div>
-									<div class="iw_tag">
-										<span class="article-status-label1">
-											已发表
-										</span>
-									</div>
-									<div>
-										<span class="create-time">
-											2019-01-27 00:08
-										</span>
-									</div>
-								</div>
-								<!-- 右边的按钮 -->
-								<div class="item_right">
-									<ul>
-										<li style="margin-top: 10px;">
-											<button type="button" class="btn btn-outline btn-danger">修改</button>
-										</li>
-										<li style="margin-top: 10px;">
-											 <button type="button" class="btn btn-outline btn-default">删除</button>
-										</li>
-									</ul>
-								</div>
+						<!-- 分页 -->
+						<div style="margin-bottom: 10px;margin-left: 230px;">
+							<div class="page-break" >
+								<ul>
+									<li v-if="cur>1">
+										<a @click="jumpUp(cur)">上一页</a>
+									</li>
+									<li v-if="cur==1">
+										<a class="banclick">上一页</a>
+									</li>
+									<li v-for="item in indexs" :class="{'active':cur==item}">
+										<a @click="btnClick(item)">{{item}}</a>
+									</li>
+									<li v-if="cur!=all">
+										<a @click="jumpDown(cur)">下一页</a>
+									</li>
+									<li v-if="cur==all">
+										<a class="banclick">下一页</a>
+									</li>
+									<li><a>共<i>{{all}}</i>页</a></li>
+								</ul>
 							</div>
-						</div>					
+						</div>
 					</div>
+					<script>
+                        var vm1 = new Vue({
+                            el:'#i22',
+                            data:{
+                                newsCount:'',
+                                newsList:'',
+                                all:'',
+                                cur:1
+                            },
+                            created:function () {
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/fabiao/'+this.cur,
+                                    success:function (result) {
+                                        console.log(result);
+                                        vm1.newsCount = result.newsCount;
+                                        vm1.newsList = result.pageinfo.list;
+                                        vm1.all = result.pageCount;
+                                    }
+                                });
+                            },
+                            methods:{
+                                chehui(newsId){
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/chehui/'+newsId,
+                                        success:function (result) {
+                                            if(result.code == 0){
+                                                alert("撤回文章成功");
+                                                window.location.href="/fawen/textManager";
+                                            }else{
+                                                alert("撤回文章失败");
+                                                window.location.href="/fawen/textManager";
+                                            }
+                                        }
+                                    })
+                                },
+                                delNews(newsId){
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/delete/'+newsId,
+                                        success:function (result) {
+                                            if(result.code == 0){
+                                                alert("删除文章成功");
+                                                window.location.href="/fawen/textManager";
+                                            }else{
+                                                alert("删除文章失败");
+                                                window.location.href="/fawen/textManager";
+                                            }
+                                        }
+                                    })
+                                },
+                                btnClick(num){
+                                    if(num!=this.cur){
+                                        this.cur = num;
+                                    }
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/textManager/fabiao/'+num,
+                                        success:function (result) {
+
+                                            vm1.newsCount = result.newsCount;
+                                            vm1.newsList = result.pageinfo.list;
+                                            vm1.all = result.pageCount;
+                                        }
+                                    })
+                                },
+                                jumpUp(num){
+                                    num = num -1;
+                                    if(num!=this.cur){
+                                        this.cur = num;
+                                    }
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/textManager/fabiao/'+num,
+                                        success:function (result) {
+                                            vm1.newsCount = result.newsCount;
+                                            vm1.newsList = result.pageinfo.list;
+                                            vm1.all = result.pageCount;
+                                        }
+                                    })
+                                },
+                                jumpDown(num){
+                                    num = num +1;
+                                    if(num!=this.cur){
+                                        this.cur = num;
+                                    }
+                                    $.ajax({
+                                        type:'post',
+                                        url:'/fawen/textManager/fabiao/'+num,
+                                        success:function (result) {
+                                            vm1.newsCount = result.newsCount;
+                                            vm1.newsList = result.pageinfo.list;
+                                            vm1.all = result.pageCount;
+                                        }
+                                    })
+                                }
+                            },
+                            computed: {
+                                indexs() {
+                                    var left = 1;
+                                    var right = this.all;
+                                    var arr = [];
+                                    if (this.all >= 7) {
+                                        if (this.cur > 4 && this.cur < this.all - 3) {
+                                            left = this.cur - 3;
+                                            right = this.cur + 3;
+                                        } else if (this.cur <= 4) {
+                                            left = 1;
+                                            right = 7;
+                                        } else {
+                                            left = this.all - 6;
+                                            right = this.all;
+                                        }
+                                    }
+                                    while (left <= right) {
+                                        arr.push(left);
+                                        left++;
+                                    }
+                                    return arr;
+                                }
+                            }
+
+                        });
+					</script>
+
+
+					<!-- 未通过 -->
 					<div class="text_list" id="i33">
 						<div class="search_result">
 							共找到了
-							<span style="color: red;">2</span>
+							<span style="color: red;">{{newsCount}}</span>
 							条符合条件的内容
 						</div>
-						<div class="list_item">
+						<div class="list_item" v-for="dt in newsList">
 							<div class="item_wrap">
 								<div style="float: left;">
 									<div class="iw_title">
-										这是一个新闻题目
+										{{dt.news.nTitle}}
 									</div>
 									<div class="iw_tag">
 										<span class="article-status-label2">
@@ -203,7 +536,7 @@
 									</div>
 									<div>
 										<span class="create-time">
-											2019-01-27 00:08
+											{{dt.creattime}}
 										</span>
 									</div>
 								</div>
@@ -211,27 +544,159 @@
 								<div class="item_right">
 									<ul>
 										<li style="margin-top: 10px;">
-											<button type="button" class="btn btn-outline btn-danger">修改</button>
-										</li>
-										<li style="margin-top: 10px;">
-											 <button type="button" class="btn btn-outline btn-default">删除</button>
+											 <button type="button" class="btn btn-outline btn-default" @click="delNews(dt.news.nid)">删除</button>
 										</li>
 									</ul>
 								</div>
 							</div>
-						</div>					
+						</div>
+
+						<!-- 分页 -->
+						<div style="margin-bottom: 10px;margin-left: 230px;">
+							<div class="page-break" >
+								<ul>
+									<li v-if="cur>1">
+										<a @click="jumpUp(cur)">上一页</a>
+									</li>
+									<li v-if="cur==1">
+										<a class="banclick">上一页</a>
+									</li>
+									<li v-for="item in indexs" :class="{'active':cur==item}">
+										<a @click="btnClick(item)">{{item}}</a>
+									</li>
+									<li v-if="cur!=all">
+										<a @click="jumpDown(cur)">下一页</a>
+									</li>
+									<li v-if="cur==all">
+										<a class="banclick">下一页</a>
+									</li>
+									<li><a>共<i>{{all}}</i>页</a></li>
+								</ul>
+							</div>
+						</div>
 					</div>
+				<script>
+                    var vm3 = new Vue({
+                        el:'#i33',
+                        data:{
+                            newsCount:'',
+                            newsList:'',
+                            all:'',
+                            cur:1
+                        },
+                        created:function () {
+                            $.ajax({
+                                type:'post',
+                                url:'/fawen/textManager/nofabiao/'+this.cur,
+                                success:function (result) {
+                                    console.log(result);
+                                    vm3.newsCount = result.newsCount;
+                                    vm3.newsList = result.pageinfo.list;
+                                    vm3.all = result.pageCount;
+                                }
+                            });
+                        },
+                        methods:{
+                            delNews(newsId){
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/delete/'+newsId,
+                                    success:function (result) {
+                                        if(result.code == 0){
+                                            alert("删除文章成功");
+                                            window.location.href="/fawen/textManager";
+                                        }else{
+                                            alert("删除文章失败");
+                                            window.location.href="/fawen/textManager";
+                                        }
+                                    }
+                                })
+                            },
+                            btnClick(num){
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/nofabiao/'+num,
+                                    success:function (result) {
+
+                                        vm3.newsCount = result.newsCount;
+                                        vm3.newsList = result.pageinfo.list;
+                                        vm3.all = result.pageCount;
+                                    }
+                                })
+                            },
+                            jumpUp(num){
+                                num = num -1;
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/nofabiao/'+num,
+                                    success:function (result) {
+                                        vm3.newsCount = result.newsCount;
+                                        vm3.newsList = result.pageinfo.list;
+                                        vm3.all = result.pageCount;
+                                    }
+                                })
+                            },
+                            jumpDown(num){
+                                num = num +1;
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/nofabiao/'+num,
+                                    success:function (result) {
+                                        vm3.newsCount = result.newsCount;
+                                        vm3.newsList = result.pageinfo.list;
+                                        vm3.all = result.pageCount;
+                                    }
+                                })
+                            }
+                        },
+                        computed: {
+                            indexs() {
+                                var left = 1;
+                                var right = this.all;
+                                var arr = [];
+                                if (this.all >= 7) {
+                                    if (this.cur > 4 && this.cur < this.all - 3) {
+                                        left = this.cur - 3;
+                                        right = this.cur + 3;
+                                    } else if (this.cur <= 4) {
+                                        left = 1;
+                                        right = 7;
+                                    } else {
+                                        left = this.all - 6;
+                                        right = this.all;
+                                    }
+                                }
+                                while (left <= right) {
+                                    arr.push(left);
+                                    left++;
+                                }
+                                return arr;
+                            }
+                        }
+
+                    });
+				</script>
+					<!-- 草稿 -->
 					<div class="text_list" id="i44">
 						<div class="search_result">
 							共找到了
-							<span style="color: red;">2</span>
+							<span style="color: red;">{{newsCount}}</span>
 							条符合条件的内容
 						</div>
-						<div class="list_item">
+						<div class="list_item" v-for="dt in newsList">
 							<div class="item_wrap">
 								<div style="float: left;">
 									<div class="iw_title">
-										这是一个新闻题目
+										{{dt.news.nTitle}}
 									</div>
 									<div class="iw_tag">
 										<span class="article-status-label">
@@ -240,7 +705,7 @@
 									</div>
 									<div>
 										<span class="create-time">
-											2019-01-27 00:08
+											{{dt.creattime}}
 										</span>
 									</div>
 								</div>
@@ -251,24 +716,161 @@
 											<button type="button" class="btn btn-outline btn-danger">修改</button>
 										</li>
 										<li style="margin-top: 10px;">
-											 <button type="button" class="btn btn-outline btn-default">删除</button>
+											 <button type="button" class="btn btn-outline btn-default" @click="delNews(dt.news.nid)">删除</button>
 										</li>
 									</ul>
 								</div>
 							</div>
-						</div>					
+						</div>
+
+						<!-- 分页 -->
+						<div style="margin-bottom: 10px;margin-left: 230px;">
+							<div class="page-break" >
+								<ul>
+									<li v-if="cur>1">
+										<a @click="jumpUp(cur)">上一页</a>
+									</li>
+									<li v-if="cur==1">
+										<a class="banclick">上一页</a>
+									</li>
+									<li v-for="item in indexs" :class="{'active':cur==item}">
+										<a @click="btnClick(item)">{{item}}</a>
+									</li>
+									<li v-if="cur!=all">
+										<a @click="jumpDown(cur)">下一页</a>
+									</li>
+									<li v-if="cur==all">
+										<a class="banclick">下一页</a>
+									</li>
+									<li><a>共<i>{{all}}</i>页</a></li>
+								</ul>
+							</div>
+						</div>
 					</div>
+				<script>
+                    var vm4 = new Vue({
+                        el:'#i44',
+                        data:{
+                            newsCount:'',
+                            newsList:'',
+                            all:'',
+                            cur:1
+                        },
+                        created:function () {
+                            $.ajax({
+                                type:'post',
+                                url:'/fawen/textManager/caogao/'+this.cur,
+                                success:function (result) {
+                                    console.log(result);
+                                    vm4.newsCount = result.newsCount;
+                                    vm4.newsList = result.pageinfo.list;
+                                    vm4.all = result.pageCount;
+                                }
+                            });
+                        },
+                        methods:{
+                            delNews(newsId){
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/delete/'+newsId,
+                                    success:function (result) {
+                                        if(result.code == 0){
+                                            alert("删除文章成功");
+                                            window.location.href="/fawen/textManager";
+                                        }else{
+                                            alert("删除文章失败");
+                                            window.location.href="/fawen/textManager";
+                                        }
+                                    }
+                                })
+                            },
+                            btnClick(num){
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/caogao/'+num,
+                                    success:function (result) {
+
+                                        vm4.newsCount = result.newsCount;
+                                        vm4.newsList = result.pageinfo.list;
+                                        vm4.all = result.pageCount;
+                                    }
+                                })
+                            },
+                            jumpUp(num){
+                                num = num -1;
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/caogao/'+num,
+                                    success:function (result) {
+                                        vm4.newsCount = result.newsCount;
+                                        vm4.newsList = result.pageinfo.list;
+                                        vm4.all = result.pageCount;
+                                    }
+                                })
+                            },
+                            jumpDown(num){
+                                num = num +1;
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/caogao/'+num,
+                                    success:function (result) {
+                                        vm4.newsCount = result.newsCount;
+                                        vm4.newsList = result.pageinfo.list;
+                                        vm4.all = result.pageCount;
+                                    }
+                                })
+                            }
+                        },
+                        computed: {
+                            indexs() {
+                                var left = 1;
+                                var right = this.all;
+                                var arr = [];
+                                if (this.all >= 7) {
+                                    if (this.cur > 4 && this.cur < this.all - 3) {
+                                        left = this.cur - 3;
+                                        right = this.cur + 3;
+                                    } else if (this.cur <= 4) {
+                                        left = 1;
+                                        right = 7;
+                                    } else {
+                                        left = this.all - 6;
+                                        right = this.all;
+                                    }
+                                }
+                                while (left <= right) {
+                                    arr.push(left);
+                                    left++;
+                                }
+                                return arr;
+                            }
+                        }
+
+                    });
+				</script>
+
+
+					<!-- 已撤回 -->
 					<div class="text_list" id="i55">
 					<div class="search_result">
 						共找到了
-						<span style="color: red;">2</span>
+						<span style="color: red;">{{newsCount}}</span>
 						条符合条件的内容
 					</div>
-					<div class="list_item">
+					<div class="list_item" v-for="dt in newsList">
 						<div class="item_wrap">
 							<div style="float: left;">
 								<div class="iw_title">
-									这是一个新闻题目
+									{{dt.news.nTitle}}
 								</div>
 								<div class="iw_tag">
 									<span class="article-status-label3">
@@ -277,7 +879,7 @@
 								</div>
 								<div>
 									<span class="create-time">
-										2019-01-27 00:08
+										{{dt.creattime}}
 									</span>
 								</div>
 							</div>
@@ -285,26 +887,154 @@
 							<div class="item_right">
 								<ul>
 									<li style="margin-top: 10px;">
-										<button type="button" class="btn btn-outline btn-danger">修改</button>
-									</li>
-									<li style="margin-top: 10px;">
-										 <button type="button" class="btn btn-outline btn-default">删除</button>
+										 <button type="button" class="btn btn-outline btn-default" @click="delNews(dt.news.nid)">删除</button>
 									</li>
 								</ul>
 							</div>
 						</div>
-					</div>					
+					</div>
+						<!-- 分页 -->
+						<div style="margin-bottom: 10px;margin-left: 230px;">
+							<div class="page-break" >
+								<ul>
+									<li v-if="cur>1">
+										<a @click="jumpUp(cur)">上一页</a>
+									</li>
+									<li v-if="cur==1">
+										<a class="banclick">上一页</a>
+									</li>
+									<li v-for="item in indexs" :class="{'active':cur==item}">
+										<a @click="btnClick(item)">{{item}}</a>
+									</li>
+									<li v-if="cur!=all">
+										<a @click="jumpDown(cur)">下一页</a>
+									</li>
+									<li v-if="cur==all">
+										<a class="banclick">下一页</a>
+									</li>
+									<li><a>共<i>{{all}}</i>页</a></li>
+								</ul>
+							</div>
+						</div>
 				</div>
-                </div>
-			
+
+				<script>
+                    var vm5 = new Vue({
+                        el:'#i55',
+                        data:{
+                            newsCount:'',
+                            newsList:'',
+                            all:'',
+                            cur:1
+                        },
+                        created:function () {
+                            $.ajax({
+                                type:'post',
+                                url:'/fawen/textManager/chehui/'+this.cur,
+                                success:function (result) {
+                                    console.log(result);
+                                    vm5.newsCount = result.newsCount;
+                                    vm5.newsList = result.pageinfo.list;
+                                    vm5.all = result.pageCount;
+                                }
+                            });
+                        },
+                        methods:{
+                            delNews(newsId){
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/delete/'+newsId,
+                                    success:function (result) {
+                                        if(result.code == 0){
+                                            alert("删除文章成功");
+                                            window.location.href="/fawen/textManager";
+                                        }else{
+                                            alert("删除文章失败");
+                                            window.location.href="/fawen/textManager";
+                                        }
+                                    }
+                                })
+                            },
+                            btnClick(num){
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/chehui/'+num,
+                                    success:function (result) {
+
+                                        vm4.newsCount = result.newsCount;
+                                        vm4.newsList = result.pageinfo.list;
+                                        vm4.all = result.pageCount;
+                                    }
+                                })
+                            },
+                            jumpUp(num){
+                                num = num -1;
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/chehui/'+num,
+                                    success:function (result) {
+                                        vm5.newsCount = result.newsCount;
+                                        vm5.newsList = result.pageinfo.list;
+                                        vm5.all = result.pageCount;
+                                    }
+                                })
+                            },
+                            jumpDown(num){
+                                num = num +1;
+                                if(num!=this.cur){
+                                    this.cur = num;
+                                }
+                                $.ajax({
+                                    type:'post',
+                                    url:'/fawen/textManager/chehui/'+num,
+                                    success:function (result) {
+                                        vm5.newsCount = result.newsCount;
+                                        vm5.newsList = result.pageinfo.list;
+                                        vm5.all = result.pageCount;
+                                    }
+                                })
+                            }
+                        },
+                        computed: {
+                            indexs() {
+                                var left = 1;
+                                var right = this.all;
+                                var arr = [];
+                                if (this.all >= 7) {
+                                    if (this.cur > 4 && this.cur < this.all - 3) {
+                                        left = this.cur - 3;
+                                        right = this.cur + 3;
+                                    } else if (this.cur <= 4) {
+                                        left = 1;
+                                        right = 7;
+                                    } else {
+                                        left = this.all - 6;
+                                        right = this.all;
+                                    }
+                                }
+                                while (left <= right) {
+                                    arr.push(left);
+                                    left++;
+                                }
+                                return arr;
+                            }
+                        }
+
+                    });
+				</script>
+
+			</div>
+
 			    <!-- 用来关闭的div 微头条部分-->
 			</div>
 		</div>
-		
-		<!-- 全局js -->
-		<script src="/static/js/jquery.min.js?v=2.1.4"></script>
-		<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
-		
+
 		<!-- 模块选择 -->
         <script src="/static/js/myself/typeselect.js"></script>
 		

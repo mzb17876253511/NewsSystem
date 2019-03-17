@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前台登录</title>
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+
+    <!-- 全局js -->
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/static/js/vue.js"></script>
+
+    <!-- layer javascript -->
+    <script src="/static/js/plugins/layer/layer.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="/static/js/content.js?v=1.0.0"></script>
+    <script src="/static/js/demo/layer-demo.js"></script>
+</head>
+
+<body class="gray-bg">
+<div style="position: relative;top:20%;">
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+
+            <div id="loginVue" >
+
+                <h3>欢迎来到先锋资讯</h3>
+
+                <form class="m-t" role="form" @submit.prevent="login" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="用户名" required="" v-model="uPhone">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="密码" required="" v-model="uPassword">
+                    </div>
+                    <button type="submit" class="btn btn-success block full-width m-b">登 录</button>
+
+
+                    <p class="text-muted text-center"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="register.html">注册一个新账号</a>
+                    </p>
+
+                </form>
+            </div>
+        </div>
+</div>
+    <script type="text/javascript">
+        var vm = new Vue({
+           el:'#loginVue',
+           data:{
+               uPhone:'',
+               uPassword:''
+           },
+            methods:{
+               login:function (event) {
+                   var data = "uPhone="+vm.uPhone+"&uPassword="+vm.uPassword;
+                   $.ajax({
+                       type:'post',
+                       url:'/login/judge',
+                       data:data,
+                       dataType:'json',
+                       success:function (result) {
+                           if(result == 0){
+                               parent.layer.alert('帐号不存在！', {
+                                   skin: 'layui-layer-hong' //样式类名
+                               }, function(){
+                                   window.location.href="/login/index";
+                               });
+                           }
+                           else if(result == 1){
+                               parent.layer.alert('密码错误！', {
+                                   skin: 'layui-layer-hong' //样式类名
+
+                               },function(){
+                                   window.location.href="/login/index";
+                               });
+                           }
+                           else if(result == 2){
+                               parent.layer.alert('登录成功', {
+                                   skin: 'layui-layer-hong' //样式类名
+                               }, function(){
+                                   window.location.href="/front/hotpoint";
+                               });
+                           }
+                           else if(result == 3){
+                               parent.layer.alert('该身份无法登陆！', {
+                                   skin: 'layui-layer-hong' //样式类名
+                               }, function(){
+                                   window.location.href="/login/index";
+                               });
+
+                           }
+
+                       }
+                   });
+               }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

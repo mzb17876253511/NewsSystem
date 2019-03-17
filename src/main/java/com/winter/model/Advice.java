@@ -1,11 +1,8 @@
 package com.winter.model;
 
-
-
 import java.util.Date;
 
 public class Advice {
-
     private String aId;
 
     private String aUserid;

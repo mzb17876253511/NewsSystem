@@ -2,10 +2,12 @@ package com.winter.model;
 
 
 
+import com.baomidou.mybatisplus.annotations.TableId;
+
 import java.util.Date;
 
 public class Users {
-
+    @TableId(value="u_id")
     private String uId;
 
     private String uName;
@@ -32,12 +34,26 @@ public class Users {
 
     private Date uCreattime;
 
-    public String getuId() {
+    private String uUsername;
+
+    private String uIdcard;
+
+    private String uTelphone;
+
+    public String getuTelphone() {
+        return uTelphone;
+    }
+
+    public void setuTelphone(String uTelphone) {
+        this.uTelphone = uTelphone;
+    }
+
+    public String getUId() {
         return uId;
     }
 
-    public void setuId(String uId) {
-        this.uId = uId == null ? null : uId.trim();
+    public void setUId(String uId) {
+        this.uId = uId;
     }
 
     public String getuName() {
@@ -45,7 +61,7 @@ public class Users {
     }
 
     public void setuName(String uName) {
-        this.uName = uName == null ? null : uName.trim();
+        this.uName = uName;
     }
 
     public String getuPhone() {
@@ -53,7 +69,7 @@ public class Users {
     }
 
     public void setuPhone(String uPhone) {
-        this.uPhone = uPhone == null ? null : uPhone.trim();
+        this.uPhone = uPhone;
     }
 
     public String getuMail() {
@@ -61,7 +77,7 @@ public class Users {
     }
 
     public void setuMail(String uMail) {
-        this.uMail = uMail == null ? null : uMail.trim();
+        this.uMail = uMail;
     }
 
     public String getuPassword() {
@@ -69,7 +85,7 @@ public class Users {
     }
 
     public void setuPassword(String uPassword) {
-        this.uPassword = uPassword == null ? null : uPassword.trim();
+        this.uPassword = uPassword;
     }
 
     public String getuType() {
@@ -77,7 +93,7 @@ public class Users {
     }
 
     public void setuType(String uType) {
-        this.uType = uType == null ? null : uType.trim();
+        this.uType = uType;
     }
 
     public String getuImage() {
@@ -85,7 +101,7 @@ public class Users {
     }
 
     public void setuImage(String uImage) {
-        this.uImage = uImage == null ? null : uImage.trim();
+        this.uImage = uImage;
     }
 
     public String getuProvince() {
@@ -93,7 +109,7 @@ public class Users {
     }
 
     public void setuProvince(String uProvince) {
-        this.uProvince = uProvince == null ? null : uProvince.trim();
+        this.uProvince = uProvince;
     }
 
     public String getuArea() {
@@ -101,7 +117,7 @@ public class Users {
     }
 
     public void setuArea(String uArea) {
-        this.uArea = uArea == null ? null : uArea.trim();
+        this.uArea = uArea;
     }
 
     public String getuTown() {
@@ -109,7 +125,7 @@ public class Users {
     }
 
     public void setuTown(String uTown) {
-        this.uTown = uTown == null ? null : uTown.trim();
+        this.uTown = uTown;
     }
 
     public String getuIntro() {
@@ -117,7 +133,7 @@ public class Users {
     }
 
     public void setuIntro(String uIntro) {
-        this.uIntro = uIntro == null ? null : uIntro.trim();
+        this.uIntro = uIntro;
     }
 
     public Date getuUpdatetime() {
@@ -134,5 +150,21 @@ public class Users {
 
     public void setuCreattime(Date uCreattime) {
         this.uCreattime = uCreattime;
+    }
+
+    public String getuUsername() {
+        return uUsername;
+    }
+
+    public void setuUsername(String uUsername) {
+        this.uUsername = uUsername;
+    }
+
+    public String getuIdcard() {
+        return uIdcard;
+    }
+
+    public void setuIdcard(String uIdcard) {
+        this.uIdcard = uIdcard;
     }
 }

@@ -1,3 +1,7 @@
+[v-cloak] {
+	display: none;
+}
+
 a{
 	text-decoration:none;
 }
@@ -43,7 +47,7 @@ article, aside, blockquote, body, button, dd, details, div,
     color: transparent;
     width: 75px;
     height: 100%;
-    background-image: url(../../img/myself/logo01.png);
+    background-image: url(../../img/myself/logo_white.png);
     background-repeat: no-repeat;
     -moz-background-size: contain;
     background-size: contain;

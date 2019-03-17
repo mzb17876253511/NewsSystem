@@ -1,17 +1,9 @@
 package com.winter.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.winter.model.Advice;
 import com.winter.model.Comment;
 
-public interface CommentMapper {
-    int deleteByPrimaryKey(String cId);
+public interface CommentMapper extends BaseMapper<Comment> {
 
-    int insert(Comment record);
-
-    int insertSelective(Comment record);
-
-    Comment selectByPrimaryKey(String cId);
-
-    int updateByPrimaryKeySelective(Comment record);
-
-    int updateByPrimaryKey(Comment record);
 }

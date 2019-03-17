@@ -1,17 +1,8 @@
 package com.winter.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.winter.model.Advice;
 
-public interface AdviceMapper {
-    int deleteByPrimaryKey(String aId);
+public interface AdviceMapper extends BaseMapper<Advice> {
 
-    int insert(Advice record);
-
-    int insertSelective(Advice record);
-
-    Advice selectByPrimaryKey(String aId);
-
-    int updateByPrimaryKeySelective(Advice record);
-
-    int updateByPrimaryKey(Advice record);
 }

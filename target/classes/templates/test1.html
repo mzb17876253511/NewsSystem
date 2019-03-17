@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+
+    <script src="/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/myself/jquery.form.js"></script>
+
+
+</head>
+<body>
+     <form>
+         <input type="file" name="file1" id="file1"/>
+         <input type="text" name="uName" id="uName"/>
+         <button type="submit" onclick="test()">提交</button>
+     </form>
+     <script>
+         function test() {
+             var formData = new FormData();
+             var uName = document.getElementsByName("uName");
+             formData.append("files",$("#file1")[0].files[0]);
+             formData.append("uName",$("#uName").val());
+             alert($("#uName").val());
+             $.ajax({
+                 type:'POST',
+                 url:"/test/ceshi",
+                 data:formData,
+                 contentType:false,
+                 processData:false,//这个很有必要，不然不行
+                 dataType:"json",
+                 mimeType:"multipart/form-data",
+                 success:function(result){
+                     alert("成功！");
+                 }
+             });
+         }
+
+     </script>
+</body>
+</html>

@@ -13,4 +13,6 @@ import org.springframework.stereotype.Service;
  **/
 
 public interface TestService extends IService<Test> {
+
+    int getTestListCount();
 }

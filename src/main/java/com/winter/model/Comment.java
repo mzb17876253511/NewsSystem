@@ -1,16 +1,15 @@
 package com.winter.model;
 
-
-
 import java.util.Date;
 
 public class Comment {
-
     private String cId;
 
     private String cFid;
 
     private String cNewsid;
+
+    private String cUserid;
 
     private String cTinynewsid;
 
@@ -19,6 +18,16 @@ public class Comment {
     private Date cUpdatetime;
 
     private String cMessage;
+
+    private int cLikenum;
+
+    public int getcLikenum() {
+        return cLikenum;
+    }
+
+    public void setcLikenum(int cLikenum) {
+        this.cLikenum = cLikenum;
+    }
 
     public String getcId() {
         return cId;
@@ -70,6 +79,14 @@ public class Comment {
 
     public String getcMessage() {
         return cMessage;
+    }
+
+    public void setcUserid(String cUserid) {
+        this.cUserid = cUserid == null ? null : cUserid.trim();
+    }
+
+    public String getcUserid() {
+        return cUserid;
     }
 
     public void setcMessage(String cMessage) {

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winter.mapper.NewsuserMapper" >
+  <resultMap id="BaseResultMap" type="com.winter.model.Newsuser" >
+    <id column="newsuser_id" property="newsuserId" jdbcType="VARCHAR" />
+    <result column="newsuser_phone" property="newsuserPhone" jdbcType="VARCHAR" />
+    <result column="newsuser_uname" property="newsuserUname" jdbcType="VARCHAR" />
+    <result column="newsuser_idcard" property="newsuserIdcard" jdbcType="VARCHAR" />
+    <result column="newsuser_name" property="newsuserName" jdbcType="VARCHAR" />
+    <result column="newsuser_intro" property="newsuserIntro" jdbcType="VARCHAR" />
+    <result column="newsuser_image" property="newsuserImage" jdbcType="VARCHAR" />
+    <result column="newsuser_userid" property="newsuserUserid" jdbcType="VARCHAR" />
+    <result column="newsuser_flag" property="newsuserFlag" jdbcType="INTEGER" />
+    <result column="newsuser_applytime" property="newsuserApplytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    newsuser_id, newsuser_phone, newsuser_uname, newsuser_idcard, newsuser_name, newsuser_intro, 
+    newsuser_image, newsuser_flag, newsuser_applytime
+  </sql>
+
+</mapper>
