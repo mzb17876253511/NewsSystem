@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>发文中心首页</title>
+		
+		<!-- CSS文件 -->
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/font-awesome.css" rel="stylesheet">
+		<link href="/static/css/animate.css" rel="stylesheet">
+		<link href="/static/css/style.css" rel="stylesheet">
+		
+		<!-- 其他CSS -->
+		<link href="/static/css/myself/fawen.css" rel="stylesheet" />
+		<link href="/static/css/myself/fawen_comment.css" rel="stylesheet" />
+
+		<!-- 全局js -->
+		<script src="/static/js/jquery.min.js?v=2.1.4"></script>
+		<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="/static/js/vue.js"></script>
+	</head>
+	<body class>
+		<div class="header">
+			<div class="header_inner">
+				<a href="#" class="inner_logo">
+					先锋资讯
+				</a>
+				<div class="inner_right" id="loginVue">
+					<div class="ir_list">
+
+					</div>
+					<div class="ir_username">
+						<span>{{user.uName}}</span>
+					</div>
+					<div class="ir_touxiang">
+						<img :src="imgPath" class="ir_touxiang_img"/>
+					</div>
+					<div class="ir_msg">
+						<img src="/static/img/myself/信封.png" class="ir_msg_img" />
+					</div>
+				</div>
+				<script>
+                    var vm = new Vue({
+                        el:'#loginVue',
+                        data:{
+                            user:'',
+                            imgPath:''
+                        },
+                        created:function () {
+                            $.ajax({
+                                type:'get',
+                                url:'/login/getUserinfo',
+                                success:function (result) {
+                                    vm.user = result.user;
+                                    vm.imgPath =result.imgPath;
+                                }
+                            })
+                        }
+                    });
+				</script>
+			</div>
+		</div>
+		<div class="content">
+			<div class="content_left">
+				<div class="cl_fw_nav">
+					<div class="nav_title">
+						<span class="garr-sub-menu">
+							<div style="float: left;">
+								<img src="/static/img/profile_small.jpg" class="nt_img"/>
+                                 先锋资讯
+							</div>
+							<div class="nt_up"></div>
+						</span>
+					</div>
+                    <ul>
+						<li class="nav_li">
+							<a href="/fawen/index1" class="">主页</a>
+						</li>
+						<li class="nav_li">
+							<a href="/fawen/textEdiot" class="">发文章</a>
+						</li>
+						<li class="nav_li">
+							<a href="/fawen/textManager" class="">内容管理</a>
+						</li>
+						<li class="nav_li" style=" background-color: #f85959;color: white;">
+							<a href="/fawen/comment" class="" >评论管理</a>
+						</li>
+						<li class="nav_li">
+							<a href="/fawen/userinfo" class="">帐号设置</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="content_right" style="background: white;">
+
+				<div class="text_middle" id="commentVue">
+				   <div class="tm_left">
+					   <p style="font-size: 15px;margin-left: 20px;">
+						   新闻标题
+					   </p>
+					   <!-- 新闻列表 -->
+					   <ul class="cr_usercard_list" >
+							<li class="cr_usercard_li" v-for="dt in newsList" v-cloak @click="getComment($event,dt.nid)">
+								<div class="cr_dian"></div>
+
+								{{dt.nTitle}}
+
+							</li>
+					   </ul>
+				   </div>
+				   <div class="tm_right">
+					   <p style="font-size: 15px;margin-left: 20px;">
+						   评论列表
+					   </p>					   
+						<!-- 用户评论 -->
+						<ul>
+							<li class="c_item" v-for="dtt in cuList" v-cloak>
+								<a href="#" class="avatar_wrap">
+									<img :src="dtt.imgPath" />
+								</a>
+								<div class="c_comment" style="margin-bottom: 10px;">
+									<div class="c_userinfo">
+										<a href="#" class="c_username">{{dtt.users.uName}}</a>
+										<span class="c_creatime">{{dtt.creattime}}</span>
+										<span title="点赞" class="c_like">
+											<span style="position: relative;top:2px">{{dtt.comment.cLikenum}}</span>
+											<img src="/static/img/myself/点赞.png" class="c_icon"/>
+										</span>
+									</div>
+									<p>{{dtt.comment.cMessage}}</p>
+									<div class="c_footer">
+										<span class="c_reply">
+											<span class="">回复</span>
+											<span class="">
+												·&nbsp;<a @click="deleteComment(dtt.comment.cid,dtt.comment.cNewsid)">删除</a>
+											</span>
+										</span>
+									</div>                                     
+								</div>
+							</li>
+						</ul>					   
+				   </div>
+				</div>
+				<script>
+					var vm = new Vue({
+						el:'#commentVue',
+						data:{
+						    newsList:'',
+							cuList:''
+						},
+						created:function () {
+							$.ajax({
+								type:'get',
+								url:'/fawen/commentData',
+								success:function (result) {
+								    console.log(result.cuList);
+									vm.newsList = result.newsList;
+									vm.cuList = result.cuList;
+                                    $(".cr_usercard_list>li:first-child").addClass("active_title");
+                                }
+							});
+                        },
+						methods:{
+						    getComment(event,newsId){
+
+						        $(".tm_left>ul>li").removeClass("active_title");
+						        $(event.target).addClass("active_title");
+
+						        $.ajax({
+									type:'post',
+									url:'/fawen/getComment/'+newsId,
+									success:function (result) {
+										vm.cuList = result.cuList;
+                                    }
+								});
+							},
+						    deleteComment(cId,newsId){
+						        $.ajax({
+									type:'post',
+									url:'/fawen/deleteComment/'+cId+'/'+newsId,
+									success:function (result) {
+                                        vm.cuList = result.cuList;
+                                    }
+								});
+							}
+						}
+					});
+				</script>
+            </div>
+		</div>
+
+		<!-- 导航栏移入变色 -->
+		<script>
+			$('.cl_fw_nav>ul>li').on('mouseenter',function(){
+		        $(this).addClass('nav_li_active');
+		    });
+		    $('.cl_fw_nav>ul>li').on('mouseleave',function(){
+		        $(this).removeClass('nav_li_active');
+		    });
+		</script>
+	</body>
+</html>

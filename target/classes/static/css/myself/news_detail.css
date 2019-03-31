@@ -279,12 +279,6 @@ article, aside, blockquote, body, button, dd, details, div,
 
 .c_inputbox .c_inputbox_left{
 	float: left;
-    display: block;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #e8e8e8;
-    border-radius: 50%;
-    background: url(../../img/myself/user.png) no-repeat 50%;
     overflow: hidden;
 }
 

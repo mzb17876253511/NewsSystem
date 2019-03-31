@@ -16,5 +16,6 @@ import java.util.List;
 
 public interface CommentService extends IService<Comment> {
 
-
+    //获得新闻总的评论数
+    int getCommentsum(String newsId);
 }

@@ -106,10 +106,27 @@
 			<div class="content_left">
 				<div class="cl_nav">
 					<div class="share-box">
-						<a href="#" class="share-count">
+						<a href="#" class="share-count" id="pinglunVue">
 							<img src="/static/img/myself/评论.png" style="width: 40px;height: 40px;" />
-							<span class="share-text">3180</span>
+							<span class="share-text">{{commentSum}}</span>
 						</a>
+						<script>
+							var vmm = new Vue({
+								el:'#pinglunVue',
+								data:{
+								    commentSum:''
+								},
+								created:function () {
+									$.ajax({
+										type:'get',
+										url:'/news/getCommentsum',
+										success:function (result) {
+											vmm.commentSum = result.commentSum;
+                                        }
+									});
+                                }
+							});
+						</script>
 						<div class="share-hr"></div>
 						<div class="share-type">
 							<img src="/static/img/myself/微博1.png" class="repost-img"/>
@@ -242,140 +259,99 @@
 					<div class="cl_text_comment" id="commentVue">
 						<div id="comment">
 							<div class="c_header">
-								<em>3177&nbsp;</em>
+								<em>{{commentSum}}</em>
 								条评论
 							</div>
 							<!-- 输入评论内容 -->
-							<div class="c_inputbox">
-								<div class="c_inputbox_left"></div>
-								<div class="c_inputbox_right">
-									<div class="input_content">
-										<textarea placeholder="写下您的评论..."></textarea>
+							<form method="post">
+								<div class="c_inputbox">
+									<div class="c_inputbox_left" v-if="userImg == '0'">
+										<img src="/static/img/myself/user.png" style="width: 30px;height: 30px;border-radius: 50%;">
 									</div>
-									<div class="input_footer">
-										<div class="c_submit">
-											评论
+									<div class="c_inputbox_left" v-else>
+										<img :src="userImg" style="width: 30px;height: 30px;border-radius: 50%;">
+									</div>
+									<div class="c_inputbox_right">
+										<div class="input_content">
+											<textarea placeholder="写下您的评论..."  name="cMessage" v-model="cMessage"></textarea>
+										</div>
+										<div class="input_footer">
+											<div class="c_submit" v-if="userImg == '0'">
+												<a style="color: white;">评论</a>
+											</div>
+											<div class="c_submit" v-else>
+												<a style="color: white;" @click="saveComment()">评论</a>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							</form>
 
 							<!-- 用户评论 -->
 							<ul>
-								<li class="c_item">
+								<li class="c_item" v-for="dt in cuList">
 									<a href="#" class="avatar_wrap">
-										<img src="/static/img/a3.jpg" />
+										<img :src="dt.imgPath" />
 									</a>
 									<div class="c_comment" style="margin-bottom: 10px;">
 										<div class="c_userinfo">
-											<a href="#" class="c_username">欧阳娜娜</a>
-											<span class="c_creatime">1天前</span>
-										</div>
-										<p>为习主席点赞</p>
-
-										<div class="c_footer">
-											<span class="c_reply">
-												<span id="freply">回复</span>
-												<span id="show">
-													·&nbsp;查看1条回复
-													<strong>
-														∨
-													</strong>
-												</span>
-												<span id="hide">
-													·&nbsp;收起回复
-													<strong>
-														∧
-													</strong>
-												</span>
-											</span>
-											<span title="举报" class="c_report">
-												<img src="/static/img/myself/举报.png" class="c_icon"/>
-											</span>
+											<a href="#" class="c_username">{{dt.users.uName}}</a>
+											<span class="c_creatime">{{dt.creattime}}</span>
 											<span title="点赞" class="c_like">
-												<span style="position: relative;top:2px">78</span>
+												<span style="position: relative;top:2px">{{dt.comment.cLikenum}}</span>
 												<img src="/static/img/myself/点赞.png" class="c_icon"/>
 											</span>
 										</div>
-									</div>
-									<!-- 回复评论框 -->
-									<div class="c_inputbox" id="finput">
+										<p>{{dt.comment.cMessage}}</p>
 
-										<div class="c_inputbox_right">
-											<div class="input_content">
-												<textarea placeholder="写下您的回复..."></textarea>
-											</div>
-											<div class="input_footer">
-												<div class="c_submit">
-													回复
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- 子回复 -->
-									<div id="commentSon" style="margin: 10px 0px 10px 37px;">
-										<a href="#" class="avatar_wrap">
-											<img src="/static/img/a3.jpg" />
-										</a>
-										<div class="c_comment">
-											<div class="c_userinfo">
-												<a href="#" class="c_username">欧阳娜娜</a>
-												<span class="c_creatime">1天前</span>
-											</div>
-											<p>为习主席点赞</p>
-
-											<div class="c_footer">
-												<span class="c_reply">
-													<span id="sreply">回复</span>
-												</span>
-												<span title="点赞" class="c_like">
-													<span style="position: relative;top:2px">78</span>
-													<img src="/static/img/myself/点赞.png" class="c_icon"/>
-												</span>
-											</div>
-										</div>
-										<!-- 子回复评论框 -->
-										<div class="c_inputbox" id="sinput" style="margin-top: 10px;">
-
-											<div class="c_inputbox_right">
-												<div class="input_content">
-													<textarea placeholder="写下您的回复..."></textarea>
-												</div>
-												<div class="input_footer">
-													<div class="c_submit">
-														回复
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-								</li>
-								<li class="c_item">
-									<a href="#" class="avatar_wrap">
-										<img src="/static/img/a3.jpg" />
-									</a>
-									<div class="c_comment">
-										<div class="c_userinfo">
-											<a href="#" class="c_username">欧阳娜娜</a>
-											<span class="c_creatime">1天前</span>
-										</div>
-										<p>为习主席点赞</p>
-										<div class="c_footer">
-											<span class="c_reply">回复</span>
-											<span title="举报" class="c_report">
-												<img src="/static/img/myself/举报.png" class="c_icon"/>
-											</span>
-											<span title="点赞" class="c_like">
-												<span style="position: relative;top:2px">78</span>
-												<img src="/static/img/myself/点赞.png" class="c_icon"/>
-											</span>
-										</div>
 									</div>
 								</li>
+
 							</ul>
 						</div>
 					</div>
+					<script>
+						var comment = new Vue({
+							el:'#commentVue',
+							data:{
+                               userImg:'',
+								cuList:'',
+								commentSum:'',
+								cMessage:''
+							},
+							created:function () {
+								$.ajax({
+									type:'get',
+									url:'/news/getComment',
+									success:function (result) {
+									    console.log(result);
+										comment.userImg = result.userImg;
+										comment.cuList = result.cuList;
+										comment.commentSum = result.commentSum;
+                                    }
+								});
+                            },
+							methods:{
+							    saveComment(){
+							        var data = "cMessage="+comment.cMessage;
+							        $.ajax({
+										type:'post',
+										url:'/news/saveComment',
+										data:data,
+										dataType:'json',
+										success:function (result) {
+										       alert("评论成功");
+                                               var newsId = result.newsId;
+                                               window.location.href="/news/details/"+newsId;
+                                        }
+									});
+								}
+							}
+
+						});
+					</script>
+
+
 					<script>
                         $("#commentSon").hide();
                         $("#hide").hide();

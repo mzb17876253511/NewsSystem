@@ -32,6 +32,11 @@ public class JumpController {
     public String userInfo(){
         return "/front/fawen_userinfo";
     }
+    @RequestMapping("/fawen/comment")
+    public String comment(){
+        return "/front/fawen_comment";
+    }
+
     /* 前台新闻 */
     @RequestMapping("/front/index")
     public String index(){

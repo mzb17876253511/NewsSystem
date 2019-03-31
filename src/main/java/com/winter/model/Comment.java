@@ -1,11 +1,12 @@
 package com.winter.model;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+
 import java.util.Date;
 
 public class Comment {
+    @TableId(value = "c_id")
     private String cId;
-
-    private String cFid;
 
     private String cNewsid;
 
@@ -14,8 +15,6 @@ public class Comment {
     private String cTinynewsid;
 
     private Date cCreattime;
-
-    private Date cUpdatetime;
 
     private String cMessage;
 
@@ -29,20 +28,12 @@ public class Comment {
         this.cLikenum = cLikenum;
     }
 
-    public String getcId() {
+    public String getCId() {
         return cId;
     }
 
-    public void setcId(String cId) {
+    public void setCId(String cId) {
         this.cId = cId == null ? null : cId.trim();
-    }
-
-    public String getcFid() {
-        return cFid;
-    }
-
-    public void setcFid(String cFid) {
-        this.cFid = cFid == null ? null : cFid.trim();
     }
 
     public String getcNewsid() {
@@ -67,14 +58,6 @@ public class Comment {
 
     public void setcCreattime(Date cCreattime) {
         this.cCreattime = cCreattime;
-    }
-
-    public Date getcUpdatetime() {
-        return cUpdatetime;
-    }
-
-    public void setcUpdatetime(Date cUpdatetime) {
-        this.cUpdatetime = cUpdatetime;
     }
 
     public String getcMessage() {

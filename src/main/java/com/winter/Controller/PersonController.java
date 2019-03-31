@@ -46,13 +46,12 @@ public class PersonController {
     @GetMapping("/data")
     @ResponseBody
     public ResponseBo getPersondata(HttpServletRequest request){
-        /*try{*/
+        try{
             HttpSession session = request.getSession();
             String id = (String)session.getAttribute("userId");
               //String id = "2";
             //获得用户信息
             Users user = usersService.selectOne(new EntityWrapper<Users>().eq("u_id",id));
-
 
                 //获得已发表的文章列表
                 List<News> newsList = newsService.selectList(new EntityWrapper<News>().eq("n_userid", id).eq("n_state", "已发表"));
@@ -66,7 +65,6 @@ public class PersonController {
                     nu.setNews(news);
                     nuList.add(nu);
                 }
-
 
             //获得收藏文章列表
             List<Collections> collectionList = collectionsService.selectList(new EntityWrapper<Collections>().eq("collection_userid",id));
@@ -115,9 +113,9 @@ public class PersonController {
             return ResponseBo.ok().put("user",user).put("newsList",nuList)
                     .put("newsCollection",ncList).put("fansList",fuList)
                     .put("userList",fuList1).put("fansCount",fansCount).put("userCount",userCount);
-  /*      }catch (Exception e){
+        }catch (Exception e){
             return ResponseBo.error();
-        }*/
+        }
     }
 
     @PostMapping("/apply")
@@ -147,10 +145,8 @@ public class PersonController {
             }
 
 
-
             HttpSession session = request.getSession();
              String id = (String)session.getAttribute("userId");
-            //String id = "2";
 
             Newsuser nu = new Newsuser();
             nu.setNewsuserFlag(0);//0 表示还未处理， 1 表示通过，2 表示 未通过

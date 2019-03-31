@@ -3,17 +3,23 @@
 <mapper namespace="com.winter.mapper.CommentMapper" >
   <resultMap id="BaseResultMap" type="com.winter.model.Comment" >
     <id column="c_id" property="cId" jdbcType="VARCHAR" />
-    <result column="c_fid" property="cFid" jdbcType="VARCHAR" />
+
     <result column="c_newsid" property="cNewsid" jdbcType="VARCHAR" />
     <result column="c_userid" property="cUserid" jdbcType="VARCHAR" />
     <result column="c_tinynewsid" property="cTinynewsid" jdbcType="VARCHAR" />
     <result column="c_creattime" property="cCreattime" jdbcType="TIMESTAMP" />
-    <result column="c_updatetime" property="cUpdatetime" jdbcType="TIMESTAMP" />
+
     <result column="c_message" property="cMessage" jdbcType="VARCHAR" />
     <result column="c_likenum" property="cLikenum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    c_id, c_fid, c_newsid, c_tinynewsid, c_creattime, c_updatetime, c_message,c_userid,c_likenum
+    c_id,  c_newsid, c_tinynewsid, c_creattime, c_message,c_userid,c_likenum
   </sql>
 
+  <select id="getCommentsum" resultType="INTEGER">
+     select count(*)
+     from comment
+     where c_newsid = #{newsId}
+
+  </select>
 </mapper>

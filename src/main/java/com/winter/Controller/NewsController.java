@@ -9,6 +9,7 @@ import com.winter.model.Comment;
 import com.winter.model.News;
 import com.winter.model.Users;
 import com.winter.model.other.CommentReply;
+import com.winter.model.other.CommentUser;
 import com.winter.model.other.NewsUsers;
 import com.winter.model.other.ScommentUser;
 import com.winter.service.CollectionsService;
@@ -93,7 +94,7 @@ public class NewsController {
     @ResponseBody
     public ResponseBo hotnews(@PathVariable("count") int count){
         PageHelper.startPage(1,count);
-        List<News> hotNews = newsService.selectList(new EntityWrapper<News>().eq("n_state","已发表").orderBy("n_commentnum",false));
+        List<News> hotNews = newsService.selectList(new EntityWrapper<News>().eq("n_state","已发表").orderBy("n_creattime",false));
         List<NewsUsers> nuList = new ArrayList<NewsUsers>();
         for(News news:hotNews){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -268,7 +269,7 @@ public class NewsController {
     @GetMapping("/hotNew")
     @ResponseBody
     public List<NewsUsers> hotnews1(){
-        List<News> newsList = newsService.getHotNews();
+        List<News> newsList = newsService.getHotNews(new Date());
         List<NewsUsers> nuList = new ArrayList<>();
         for(News news:newsList){
             String imgPath = "/file/showImg/"+news.getnCover();
@@ -429,10 +430,9 @@ public class NewsController {
     @GetMapping("/getNews")
     @ResponseBody
     public ResponseBo getNews(HttpServletRequest request){
-        //获取用户
-        //String nId = "1";
-
-        News news = newsService.selectOne(new EntityWrapper<News>().eq("n_id",nId));
+        System.out.println(nId);
+        //News news = newsService.selectOne(new EntityWrapper<News>().eq("n_id",nId));
+        News news = newsService.selectById(nId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String nCreattime = sdf.format(news.getnCreattime());
 
@@ -454,48 +454,73 @@ public class NewsController {
         return ResponseBo.ok().put("newsList",newsList).put("user",user);
     }
 
-
-    //返回 新闻评论数据
-    @PostMapping("/comment/{curPage}")
+    //获得新闻评论数量
+    @GetMapping("/getCommentsum")
     @ResponseBody
-    public ResponseBo getComment(@PathVariable("curPage") int curPage) {
-        //获得用户的信息
+    public ResponseBo getCommentsum(){
+        int commentSum = commentService.getCommentsum(nId);
+        return ResponseBo.ok().put("commentSum",commentSum);
+    }
 
-        //获得 评论的信息
-        String newsId = "1";
-        PageHelper.startPage(curPage, 2);
+    //获得新闻评论数据
+    @GetMapping("/getComment")
+    @ResponseBody
+    public ResponseBo getComment(HttpServletRequest request){
+        /*try {*/
+            HttpSession session = request.getSession();
+            String userId = (String) session.getAttribute("userId");
+            String userImg = "0";//0表示未登录
+            if(userId != null) {
+                Users user = usersService.selectById(userId);
+                userImg = "/file/showImg/" + user.getuImage();
+            }
+            //得到评论列表
+            List<Comment> commentList = commentService.selectList(new EntityWrapper<Comment>().eq("c_newsid",nId));
+            List<CommentUser> cuList = new ArrayList<>();
+            for(Comment comment:commentList){
+                Users user1 = usersService.selectById(comment.getcUserid());
+                String imgPath = "/file/showImg/"+user1.getuImage();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String creattime = sdf.format(comment.getcCreattime());
 
-        List<Comment> fcommentList = commentService.selectList(new EntityWrapper<Comment>().eq("c_newsid",newsId).eq("c_fid","0").orderBy("c_likenum",false));
-        List<CommentReply> comreplyList = new ArrayList<>();
-        for (Comment fcomment : fcommentList) {
-            String fid = fcomment.getcId();
-
-            //获取 评论下回复的信息
-            List<Comment> scommentList = commentService.selectList(new EntityWrapper<Comment>().eq("c_fid", fid).orderBy("c_likenum",false));
-            List<ScommentUser> scomuserList = new ArrayList<>();
-            for (Comment scomment : scommentList) {
-                String userId = scomment.getcUserid();
-                Users user = usersService.selectOne(new EntityWrapper<Users>().eq("u_id",userId));
-
-                ScommentUser scomuser = new ScommentUser();
-                scomuser.setScomment(scomment);
-                scomuser.setUser(user);
-                scomuserList.add(scomuser);
+                CommentUser cu = new CommentUser();
+                cu.setComment(comment);
+                cu.setUsers(user1);
+                cu.setImgPath(imgPath);
+                cu.setCreattime(creattime);
+                cuList.add(cu);
             }
 
-            CommentReply comreply = new CommentReply();
+            //新闻总的评论条数
+            int commentSum = commentService.getCommentsum(nId);
 
-            String userId = fcomment.getcUserid();
-            Users user = usersService.selectOne(new EntityWrapper<Users>().eq("u_id", userId));
+            return ResponseBo.ok().put("userImg",userImg).put("cuList",cuList).put("commentSum",commentSum);
+        /*}catch (Exception e){
+            return ResponseBo.error();
+        }*/
+    }
 
-            comreply.setFcomment(fcomment);
-            comreply.setScommentUsers(scomuserList);
-            comreply.setUser(user);
-            comreplyList.add(comreply);
-        }//for的结尾
+    //评论新闻
+    @PostMapping("/saveComment")
+    @ResponseBody
+    public ResponseBo saveComment(HttpServletRequest request,String cMessage){
 
-        PageInfo<CommentReply> commentReplyPageInfo = new PageInfo<>(comreplyList);
-        return ResponseBo.ok().put("pageinfo",commentReplyPageInfo);
+        Comment comment = new Comment();
+        UUID id = UUID.randomUUID();
+        String cId = String.valueOf(id);
+        HttpSession session =request.getSession();
+        String userId = (String)session.getAttribute("userId");
+
+        comment.setCId(cId);
+        comment.setcMessage(cMessage);
+        comment.setcLikenum(0);
+        comment.setcCreattime(new Date());
+        comment.setcNewsid(nId);
+        comment.setcUserid(userId);
+        commentService.insert(comment);
+        System.out.println("插入评论成功");
+
+        return ResponseBo.ok().put("newsId",nId);
     }
 
 
@@ -578,4 +603,6 @@ public class NewsController {
             return ResponseBo.error();
         }
     }
+
+
 }

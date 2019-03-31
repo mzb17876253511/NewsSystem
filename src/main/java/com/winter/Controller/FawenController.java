@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.winter.mapper.NewsMapper;
+import com.winter.model.Comment;
 import com.winter.model.News;
 import com.winter.model.Users;
+import com.winter.model.other.CommentUser;
 import com.winter.model.other.NewsUsers;
+import com.winter.service.CommentService;
 import com.winter.service.FansService;
 import com.winter.service.NewsService;
 import com.winter.service.UsersService;
@@ -14,14 +17,20 @@ import com.winter.utils.ResponseBo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author 马圳彬
@@ -38,6 +47,8 @@ public class FawenController {
     private FansService fansService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private CommentService commentService;
 
     //发文系统首页
     @GetMapping("/index")
@@ -293,9 +304,11 @@ public class FawenController {
     @PostMapping("/updateUser/{userId}")
     @ResponseBody
     public ResponseBo updateUser(@PathVariable("userId") String userId,HttpServletRequest request,
-                                 String uName,String uIntro,String uUsername,String uPhone,String uIdcard){
+                                 String uName,String uIntro,String uUsername,String uPhone,String uIdcard,
+                                 @RequestParam( value="files",required=false)MultipartFile multipartFile)throws IllegalStateException, IOException{
 
-        try{
+
+        if(multipartFile==null) {
             Users user = usersService.selectById(userId);
             user.setuName(uName);
             user.setuIntro(uIntro);
@@ -307,9 +320,198 @@ public class FawenController {
             System.out.println("用户信息修改成功");
             usersService.insertOrUpdate(user);
             return ResponseBo.ok();
-        }catch (Exception e){
-            System.out.println("用户信息修改异常");
-            return ResponseBo.error();
         }
+            //获取文件名
+            String name="";
+            String fileName1="";
+
+            name = multipartFile.getOriginalFilename();//直接返回文件的名字
+            String subffix = name.substring(name.lastIndexOf(".") + 1, name.length());
+            UUID uuid = UUID.randomUUID();
+            String uid = String.valueOf(uuid);
+            String fileName = uid;
+            fileName1 = fileName+"."+subffix;
+
+            String path = "E:\\NewsImg\\";
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            multipartFile.transferTo(new File(file + "\\" + fileName + "." + subffix));//保存文件
+
+            Users user = usersService.selectById(userId);
+            user.setuImage(fileName1);
+            user.setuName(uName);
+            user.setuIntro(uIntro);
+            user.setuUsername(uUsername);
+            user.setuTelphone(uPhone);
+            user.setuIdcard(uIdcard);
+            user.setuUpdatetime(new Date());
+
+            System.out.println("用户信息修改成功");
+            usersService.insertOrUpdate(user);
+
+            return ResponseBo.ok();
+    }
+
+    //返回修改文章界面
+    String nId;
+
+    @RequestMapping("/update/{newsId}")
+    public String updateNews(@PathVariable("newsId") String newsId){
+        this.nId = newsId;
+        return "/front/fawen_textUpdate";
+    }
+
+    //得到新闻信息
+    @GetMapping("/getNews")
+    @ResponseBody
+    public ResponseBo getNews(){
+        News news = newsService.selectById(nId);
+        String imgPath = "/file/showImg/"+news.getnCover();
+        return ResponseBo.ok().put("news",news).put("imgPath",imgPath);
+    }
+
+    //修改文章后 发表
+
+    @RequestMapping("/fabiao/{stateId}")
+    @ResponseBody
+    public ModelAndView fabiao(@PathVariable("stateId") int stateId ,org.apache.catalina.servlet4preview.http.HttpServletRequest request, News news,
+                               @RequestParam(value="file1",required=false) MultipartFile multipartFile)throws ServletException, IOException {
+
+        //如果没有改变图片的话
+        if(multipartFile.getOriginalFilename().isEmpty()){
+            News news1 = newsService.selectById(nId);
+            news1.setnTitle(request.getParameter("nTitle"));
+            news1.setnMessage(request.getParameter("nMessage"));
+            news1.setnMenuid(request.getParameter("nMenuid"));
+            news1.setnCreattime(new Date());
+            if(stateId == 1){
+               news1.setnState("审核中");
+            }
+
+            newsService.insertOrUpdate(news1);
+        }else{
+            //获取文件名
+            String name="";
+            String fileName1="";
+
+                name = multipartFile.getOriginalFilename();//直接返回文件的名字
+                String subffix = name.substring(name.lastIndexOf(".") + 1, name.length());
+                UUID uuid = UUID.randomUUID();
+                String uid = String.valueOf(uuid);
+                String fileName = uid;
+                fileName1 = fileName+"."+subffix;
+
+                String path = "E:\\NewsImg\\";
+                File file = new File(path);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                multipartFile.transferTo(new File(file + "\\" + fileName + "." + subffix));//保存文件
+
+                News news2 = newsService.selectById(nId);
+
+                if(stateId == 1) {
+                    news2.setnState("审核中");
+                }
+
+                news2.setnTitle(request.getParameter("nTitle"));
+                news2.setnMessage(request.getParameter("nMessage"));
+                news2.setnCover(fileName1);
+                news2.setnMenuid(request.getParameter("nMenuid"));
+                news2.setnCreattime(new Date());
+                newsService.insertOrUpdate(news2);
+        }
+
+        return new ModelAndView("redirect:/fawen/update/"+nId);
+    }
+
+
+    //获得评论管理信息
+    @GetMapping("/commentData")
+    @ResponseBody
+    public ResponseBo commentData(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String userId1 = (String)session.getAttribute("userId");
+
+        //新闻题目列表
+        List<News> newsList = newsService.selectList(new EntityWrapper<News>().
+                eq("n_userid",userId1).eq("n_state","已发表").orderBy("n_creattime",false));
+        News news = newsList.get(0);
+        String newsId = news.getNId();
+        //评论列表
+        List<Comment> commentList = commentService.selectList(new EntityWrapper<Comment>().eq("c_newsid",newsId));
+        List<CommentUser> cuList = new ArrayList<>();
+        for(Comment comment:commentList){
+            String userId = comment.getcUserid();
+            Users user = usersService.selectById(userId);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String creattime = sdf.format(comment.getcCreattime());
+
+            String imgPath = "/file/showImg/"+user.getuImage();
+
+            CommentUser cu = new CommentUser();
+            cu.setComment(comment);
+            cu.setUsers(user);
+            cu.setImgPath(imgPath);
+            cu.setCreattime(creattime);
+            cuList.add(cu);
+        }
+        return ResponseBo.ok().put("cuList",cuList).put("newsList",newsList);
+    }
+
+    @PostMapping("/getComment/{newsId}")
+    @ResponseBody
+    public ResponseBo getComment(@PathVariable("newsId") String newsId){
+        //评论列表
+        List<Comment> commentList = commentService.selectList(new EntityWrapper<Comment>().eq("c_newsid",newsId));
+        List<CommentUser> cuList = new ArrayList<>();
+        for(Comment comment:commentList){
+            String userId = comment.getcUserid();
+            Users user = usersService.selectById(userId);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String creattime = sdf.format(comment.getcCreattime());
+
+            String imgPath = "/file/showImg/"+user.getuImage();
+
+            CommentUser cu = new CommentUser();
+            cu.setComment(comment);
+            cu.setUsers(user);
+            cu.setImgPath(imgPath);
+            cu.setCreattime(creattime);
+            cuList.add(cu);
+        }
+        return ResponseBo.ok().put("cuList",cuList);
+    }
+
+    //删除评论
+    @PostMapping("/deleteComment/{cId}/{newsId}")
+    @ResponseBody
+    public ResponseBo deleteComment(@PathVariable("cId") String cId,@PathVariable("newsId") String newsId){
+        commentService.deleteById(cId);
+        //评论列表
+        List<Comment> commentList = commentService.selectList(new EntityWrapper<Comment>().eq("c_newsid",newsId));
+        List<CommentUser> cuList = new ArrayList<>();
+        for(Comment comment:commentList){
+            String userId = comment.getcUserid();
+            Users user = usersService.selectById(userId);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String creattime = sdf.format(comment.getcCreattime());
+
+            String imgPath = "/file/showImg/"+user.getuImage();
+
+            CommentUser cu = new CommentUser();
+            cu.setComment(comment);
+            cu.setUsers(user);
+            cu.setImgPath(imgPath);
+            cu.setCreattime(creattime);
+            cuList.add(cu);
+        }
+        return ResponseBo.ok().put("cuList",cuList);
+
     }
 }

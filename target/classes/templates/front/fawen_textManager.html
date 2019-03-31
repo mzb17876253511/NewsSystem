@@ -84,7 +84,7 @@
 							<a href="/fawen/textManager" class="">内容管理</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">评论管理</a>
+							<a href="/fawen/comment" class="">评论管理</a>
 						</li>
 						<li class="nav_li">
 							<a href="/fawen/userinfo" class="">帐号设置</a>
@@ -162,7 +162,7 @@
 									<div class="item_right">
 										<ul>
 											<li style="margin-top: 10px;" v-if="dt.news.nState == '草稿'">
-												<button type="button" class="btn btn-outline btn-danger">修改</button>
+												<button type="button" class="btn btn-outline btn-danger" @click="updateNews(dt.news.nid)">修改</button>
 											</li>
 											<li style="margin-top: 10px;" v-if="dt.news.nState == '已发表'">
 												<button type="button" class="btn btn-outline btn-success" @click="chehui(dt.news.nid)">撤回</button>
@@ -222,6 +222,9 @@
                                 });
                             },
 							methods:{
+                                updateNews(newsId){
+                                   window.location.href="/fawen/update/"+newsId;
+								},
                                 btnClick(num){
                                     if(num!=this.cur){
                                         this.cur = num;
@@ -713,7 +716,7 @@
 								<div class="item_right">
 									<ul>
 										<li style="margin-top: 10px;">
-											<button type="button" class="btn btn-outline btn-danger">修改</button>
+											<button type="button" class="btn btn-outline btn-danger" @click="updateNews(dt.news.nid)">修改</button>
 										</li>
 										<li style="margin-top: 10px;">
 											 <button type="button" class="btn btn-outline btn-default" @click="delNews(dt.news.nid)">删除</button>
@@ -769,6 +772,9 @@
                             });
                         },
                         methods:{
+                            updateNews(newsId){
+                               window.location.href = "/fawen/update/"+newsId;
+							},
                             delNews(newsId){
                                 $.ajax({
                                     type:'post',

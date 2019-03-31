@@ -104,6 +104,7 @@
             });
 
 		</script>
+		<script src="/static/js/myself/uploadPreview.js"></script>
 		<script src="/static/js/vue.js"></script>
 	</head>
 	<body class>
@@ -170,14 +171,11 @@
 							<a href="/fawen/textManager" class="">内容管理</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">评论管理</a>
+							<a href="/fawen/comment" class="">评论管理</a>
 						</li>
 						<li class="nav_li" style=" background-color: #f85959;color: white;">
 							<a href="/fawen/userinfo" class="">帐号设置</a>
-						</li>	
-					<!--	<li class="nav_li">
-							<a href="#" class="">系统通知</a>
-						</li>		-->
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -215,7 +213,7 @@
 									<div class="col-sm-8">
 										<ul id="warp">
 											<li>
-												<img  :src="'/file/showImg/'+user.uImage" id="imgShow_WU_FILE_0" width="100" height="100" />
+												<img  id="imgShow_WU_FILE_0" width="100" height="100" />
 												<span style="position: relative;left:5px;top:-20px;font-size: 15px;">要求清晰、健康，代表品牌形象</span>
 												<input type="file" id="up_img_WU_FILE_0" name="file1" style="position: relative;left:110px;top:-35px;"/>
 											</li>
@@ -262,13 +260,15 @@
 							url:'/fawen/getUserinfo',
 							success:function (result) {
 								vm1.user = result.user;
+                                var imgPath = "/file/showImg/"+result.user.uImage;
+                                $("#imgShow_WU_FILE_0").attr("src",imgPath);
                             }
 						});
                     },
 					methods:{
                         userUpdate:function (userId) {
                             var formData = new FormData();
-
+                            formData.append("files",$("#up_img_WU_FILE_0")[0].files[0]);
                             formData.append("uName",$("#firstname").val());
                             formData.append("uIntro",$("#lastname").val());
                             formData.append("uUsername",$("#username").val());
@@ -289,7 +289,7 @@
                                     if(result.code == 1){
                                         alert("提交失败！");
                                     }else{
-                                        alert("提交成功！");
+
                                     }
 
                                 }

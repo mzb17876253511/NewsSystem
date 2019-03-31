@@ -70,6 +70,7 @@
     select *
     from news
     where n_state = '已发表'
+    and DATEDIFF(#{nowDay},n_creattime) = 0
     order by n_browsenum desc
     limit 0,5
   </select>
@@ -139,4 +140,6 @@
 
     order by n_creattime desc
   </select>
+
+
 </mapper>

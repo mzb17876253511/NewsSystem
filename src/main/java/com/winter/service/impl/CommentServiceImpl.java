@@ -22,5 +22,11 @@ import java.util.List;
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
+    @Autowired
+    private CommentMapper commentMapper;
 
+    //获得新闻总的评论数
+    public int getCommentsum(String newsId){
+        return commentMapper.getCommentsum(newsId);
+    }
 }

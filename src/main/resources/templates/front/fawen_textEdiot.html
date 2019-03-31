@@ -121,7 +121,7 @@
 							<a href="/fawen/textManager" class="">内容管理</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">评论管理</a>
+							<a href="/fawen/comment" class="">评论管理</a>
 						</li>
 						<li class="nav_li">
 							<a href="/fawen/userinfo" class="">帐号设置</a>
@@ -214,6 +214,7 @@
             editor.customConfig.uploadImgServer = '/news/upload';
             editor.customConfig.uploadFileName = 'myFileName';
 
+            editor.customConfig.pasteIgnoreImg = true;
             editor.customConfig.uploadImgHooks = {
                 customInsert: function (insertImg, result, editor) {
                     var url =result.data;//获取后台返回的url
@@ -221,7 +222,6 @@
                 }
             };
 			editor.create();
-
 
             function fabiao() {
 

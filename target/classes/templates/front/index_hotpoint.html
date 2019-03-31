@@ -321,21 +321,21 @@
 									<a @click="logout()">退出登录</a>
 								</p>
 								<div class="loginHead">
-									<a href="/front/person" target="_blank">
+									<a href="/front/person" target="_blank" v-cloak>
 										<img :src="imgPath" class="loginImg"/>
 									</a>
-									<p class="loginName">
+									<p class="loginName" v-cloak>
 										{{user.uName}}
 									</p>
 								</div>
 								<div class="loginBottom">
 									<div class="botleft">
-										<span class="num">{{userCount}}</span><br/>
+										<span class="num" v-cloak>{{userCount}}</span><br/>
 										<span>关注</span>
 									</div>
 									<div class="line"></div>
 									<div class="botright">
-										<span class="num">{{fansCount}}</span><br/>
+										<span class="num" v-cloak>{{fansCount}}</span><br/>
 										<span>粉丝</span>
 									</div>
 								</div>

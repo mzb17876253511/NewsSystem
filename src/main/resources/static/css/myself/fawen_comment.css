@@ -1,0 +1,160 @@
+[v-cloak] {
+    display: none;
+}
+
+.content_right .text_header{
+	width: 980px;
+	height: 67px;
+	
+	border-bottom: 1px solid #e8e8e8;
+	font-size: 16px;
+	padding-left: 20px;
+    padding-top: 20px;
+}
+
+.text_type{
+	display: inline-block;
+	padding: 10px 20px;
+	border-bottom: 2px solid transparent;
+}
+
+.text_type_active{
+	color: #f85959;
+}
+
+.text_middle{
+	width: 980px;
+	height: auto;
+}
+
+.tm_left{
+	padding: 10px 20px 0px 20px;
+	float: left;
+	width: 299px;
+	height: 600px;
+	border-right: 1px solid gainsboro;
+}
+
+.cr_usercard_list{
+	margin-top: 5px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.cr_usercard_li{
+	margin-top: 12px;
+    line-height: 20px;
+    font-size: 14px;
+    padding-left: 9px;
+    position: relative;
+    text-align: justify;
+}
+
+.cr_usercard_li a{
+	color: #222;
+    line-height: 20px;
+}
+
+.cr_dian{
+	    position: absolute;
+    content: "";
+    width: 4px;
+    height: 4px;
+    background: #999;
+    left: 0;
+    top: 6px;
+}
+
+/*  */
+
+.tm_right{
+	padding: 10px 20px 0px 20px;
+	float: right;
+	width: 680px;
+	height: 600px;
+}
+
+
+.c_item:first-child {
+    margin-top: 6px;
+}
+
+.c_item {
+    padding: 10px 0px 0px 0px;
+    border-top: 1px solid #f2f2f2;
+}
+
+.c_item .avatar_wrap{
+	float: left;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar_wrap img {
+    width: 100%;
+    height: 100%;
+}
+
+.c_comment{
+	margin-left: 42px;
+    overflow: hidden;
+}
+.c_userinfo{
+	margin-bottom: 4px;
+}
+.c_username{
+	color: #406599;
+    cursor: pointer;
+}
+.c_item a, .c_item span{
+	font-size: 15px;
+}
+.c_creatime{
+	color: #777
+}
+
+.c_comment p {
+    font-size: 14px;
+    line-height: 22px;
+    color: #222;
+}
+
+.c_comment .c_like{
+	float: right;
+    color: #777;
+    cursor: pointer;
+}
+
+.c_comment .c_icon{
+	color: #cacaca;
+    font-size: 14px;
+	font-family: tticons!important;
+    font-size: 12px;
+    display: inline-block;
+    line-height: 1;
+    speak: none;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+	width: 15px;
+	height: 15px;
+}
+
+.c_comment .c_footer {
+    margin-top: 6px;
+    font-size: 0;
+}
+.c_comment .c_reply{
+	color: #406599;
+    cursor: pointer;
+}
+
+.active_title{
+    color:#f85959;
+}
+

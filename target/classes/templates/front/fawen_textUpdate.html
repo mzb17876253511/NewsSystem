@@ -121,14 +121,12 @@
 							<a href="/fawen/textManager" class="">内容管理</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">评论管理</a>
+							<a href="/fawen/comment" class="">评论管理</a>
 						</li>
 						<li class="nav_li">
-							<a href="#" class="">帐号设置</a>
+							<a href="/fawen/userinfo" class="">帐号设置</a>
 						</li>	
-						<li class="nav_li">
-							<a href="#" class="">系统通知</a>
-						</li>																															
+
 					</ul>
 				</div>
 			</div>
@@ -147,7 +145,7 @@
 				<form method="post" action="" id="newsForm" enctype="multipart/form-data">
 					<div class="text_input">
 						<div class="text_title">
-							<input placeholder="请输入文章标题(5-30个汉字)" type="text" class="tui2-input" name="nTitle"/>
+							<input placeholder="请输入文章标题(5-30个汉字)" type="text" class="tui2-input" name="nTitle" v-model="news.nTitle"/>
 						</div>
 						<div id="div1" class="toolbar">
 						</div>
@@ -161,11 +159,11 @@
 								<li>
 									<span class="text_help_tag">类型</span>
 									<span>
-									<label><input name="nMenuid" type="radio" value="科技" />&nbsp;科技 </label>
-									<label><input name="nMenuid" type="radio" value="社会" />&nbsp;社会 </label>
-									<label><input name="nMenuid" type="radio" value="体育" />&nbsp;体育 </label>
-									<label><input name="nMenuid" type="radio" value="娱乐" />&nbsp;娱乐 </label>
-									<label><input name="nMenuid" type="radio" value="游戏" />&nbsp;游戏 </label>
+									<label><input name="nMenuid" type="radio" value="科技" id="r1"/>&nbsp;科技 </label>
+									<label><input name="nMenuid" type="radio" value="社会" id="r2"/>&nbsp;社会 </label>
+									<label><input name="nMenuid" type="radio" value="体育" id="r3"/>&nbsp;体育 </label>
+									<label><input name="nMenuid" type="radio" value="娱乐" id="r4"/>&nbsp;娱乐 </label>
+									<label><input name="nMenuid" type="radio" value="游戏" id="r5"/>&nbsp;游戏 </label>
 								</span>
 								</li>
 								<br/>
@@ -183,10 +181,10 @@
 						</div>
 					</div>
 					<div class="text_button">
-					  <button type="button" class="btn btn-danger" onclick="fabiao()" style="width: 100px;height: 40px;margin-right: 15px;">发表</button>
-					  <button type="button" class="btn btn-white" style="width: 100px;height: 40px;background: #f9f9f9;margin-right: 15px;">定时发表</button>
-					  <button type="button" class="btn btn-white" style="width: 100px;height: 40px;background: #f9f9f9;margin-right: 15px;">预览</button>
-					  <button type="button" class="btn btn-white" id="caogao" style="width: 100px;height: 40px;background: #f9f9f9;">存为草稿</button>
+					  <button type="button" class="btn btn-danger" onclick="fabiao(1)" style="width: 100px;height: 40px;margin-right: 15px;">发表</button>
+	<!--				  <button type="button" class="btn btn-white" style="width: 100px;height: 40px;background: #f9f9f9;margin-right: 15px;">定时发表</button>
+					  <button type="button" class="btn btn-white" style="width: 100px;height: 40px;background: #f9f9f9;margin-right: 15px;">预览</button>-->
+					  <button type="button" class="btn btn-white" onclick="fabiao(2)" id="caogao" style="width: 100px;height: 40px;background: #f9f9f9;">存为草稿</button>
 					</div>
 				</form>
             </div>
@@ -220,21 +218,57 @@
                     insertImg(url);
                 }
             };
-			editor.create();
 
-
-            function fabiao() {
-
+            function fabiao(stateId) {
                 $("#newsContent").attr("value",editor.txt.html());
-                fabiaoNews();
+                fabiaoNews(stateId);
             }
 
-            function fabiaoNews() {
+            function fabiaoNews(stateId) {
                 $("#newsForm").removeAttr("action");
-                $("#newsForm").attr("action","/news/fabiao");
+                $("#newsForm").attr("action","/fawen/fabiao/"+stateId);
                 $("#newsForm").submit();
-                alert("发表成功");
+                if(stateId == 1)
+                    alert("发表成功");
+
+                if(stateId == 2)
+                    alert("存为草稿");
             }
+
+
+            var vm = new Vue({
+				el:'#newsForm',
+				data:{
+				    news:'',
+					content:'',
+					imgPath:''
+				},
+				created:function () {
+					$.ajax({
+						type:'get',
+						url:'/fawen/getNews',
+						success:function (result) {
+						    vm.news = result.news;
+							vm.content = result.news.nMessage;
+							var imgPath = result.imgPath;
+							$("#imgShow_WU_FILE_0").attr("src",imgPath);
+							editor.create();
+							editor.txt.html(result.news.nMessage);
+
+							if(result.news.nMenuid == "科技")
+							    document.getElementById("r1").checked = true;
+                            if(result.news.nMenuid == "社会")
+                                document.getElementById("r2").checked = true;
+                            if(result.news.nMenuid == "体育")
+                                document.getElementById("r3").checked = true;
+                            if(result.news.nMenuid == "娱乐")
+                                document.getElementById("r4").checked = true;
+                            if(result.news.nMenuid == "游戏")
+                                document.getElementById("r5").checked = true;
+                        }
+					});
+                }
+			});
         </script>
 
 		<!-- 上传封面 -->

@@ -11,6 +11,7 @@ import com.winter.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,8 +47,8 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
         return newsMapper.getHotGame();
     };
 
-    public List<News> getHotNews(){
-        return newsMapper.getHotNews();
+    public List<News> getHotNews(Date nowDay){
+        return newsMapper.getHotNews(nowDay);
     }
 
     public List<News> getHotFiveNews(String userId){

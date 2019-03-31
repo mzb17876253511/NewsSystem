@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.winter.model.News;
 import com.winter.model.Test;
 
+import java.util.Date;
 import java.util.List;
 
 public interface NewsMapper extends BaseMapper<News> {
@@ -21,7 +22,7 @@ public interface NewsMapper extends BaseMapper<News> {
     public News getHotGame();
 
     //24小时热新闻
-    List<News> getHotNews();
+    List<News> getHotNews(Date nowDay);
 
     // 获得用户 最热的 五条新闻
     List<News> getHotFiveNews(String userId);
@@ -46,4 +47,5 @@ public interface NewsMapper extends BaseMapper<News> {
 
     // 获得用户所有新闻
     List<News> getAllnews(String userId);
+
 }

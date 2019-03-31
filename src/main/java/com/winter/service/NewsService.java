@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.winter.model.News;
 import com.winter.model.Test;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public interface NewsService extends IService<News> {
     News getHotGame();
 
     //24小时热新闻
-    List<News> getHotNews();
+    List<News> getHotNews(Date nowDay);
     //用户最热的五条新闻
     List<News> getHotFiveNews(String userId);
 
